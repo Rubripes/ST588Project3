@@ -1,0 +1,168 @@
+---
+title: "EDA"
+author: "Matthew Bray"
+format: html
+editor: visual
+---
+
+# Exploratory Data Analysis for the Diabetes Health Indicators Dataset:
+
+Data were sourced from [Kaggle](https://www.kaggle.com/datasets/alexteboul/diabetes-health-indicators-dataset?resource=download).
+
+## Introduction:
+
+The prevalence of Diabetes has increased from 200 million to 830 million case worldwide from 1990 to 2022. In 2021 diabetes and diabetes related complications were implicated in over 2 million deaths. [WHO](https://www.who.int/news-room/fact-sheets/detail/diabetes)
+
+The Behavioral Risk Factor Surveillance System (BRFSS) is a survey that is conducted annually by the CDC and responses are collected from over 400,000 Americans. This survery has been conducted yearly since 1984. The dataset to be analyzed for this project ("diabetes_012_health_indicators_BRFSS2015.csv") contains 253,680 responses to the survey. There are three dependent variable classes, **0=no diabetes or only during pregnancy**, **1=prediabetes**, and **2= diabetes**. There is class imbalance in the dataset and there are 21 feature variables. [Diabetes Health Indicators Dataset](https://www.kaggle.com/datasets/alexteboul/diabetes-health-indicators-dataset/)
+
+Most of the variables appear to be factor type variables (e.g., numbers are used to encode a class), and they will be explored and reformatted during the EDA below.
+
+## Data Import, Structure Evalution, and Reformatting:
+
+The data were downloaded from the source and saved locally on my hard drive. They will be imported below, evaluated, and formatted for the downstream uses of visualization and modelling.
+
+The first step is to load libraries necessary for data exploration:
+
+```{r}
+library(tidyverse)
+```
+
+Here we'll read in the data using the readr::read_csv command
+
+```{r}
+#read csv file
+data <- read_csv("./diabetes_binary_health_indicators_BRFSS2015.csv")
+```
+
+Now that the data are in the R global environment, it will be useful to understand the variables, the data types they were assigned upon import and this will help us to think about how best to reformat the data for future steps. We'll use a few commands to do this: `str()` will give us the overall structure and can help to visualize the number of values for categorical variables and `head()` will help us to see the first 6 rows of the data to further understand information provided by `str()`.
+
+```{r}
+#use str() to check out variable data types and values.
+str(data)
+```
+
+All of the varibles are numeric.  Let's see what the actual data look like.
+
+```{r}
+head(data)
+```
+
+We know from the description of the dataset that `Diabetes_binary` is is a factor type variable, with 0, 1, and 2 representing different diabetes "diagnoses". We'll use the descriptions provided with the data to format the dataset.
+
+I'd like to understand what values are available for the factor type variables in this dataset so that I can set values appropriate, or verify that they were set by R appropriately. The description of the `Diabetes_binary variable` appears to have three levels, but the chart immediately under it shows a binary response. [Diabetes_binary](https://www.kaggle.com/datasets/alexteboul/diabetes-health-indicators-dataset/?select=diabetes_binary_health_indicators_BRFSS2015.csv).
+
+```{r}
+#create count table of levels
+table(data$Diabetes_binary)
+```
+Ok, the description on the webpage appears to be misaligned.  This does appear to be a binary response with two levels (0,1)
+
+Let's change the factor type variables to factors in the dataset.  We'll create a list of the variables that we want to change to factors, then we'll change the names of all the variables, then we'll apply the factor list through the `factor()` function to selectively change the variables to <fctr>.  We'll also change a few variables to integers at the same time using the same logic.
+```{r}
+#create list of variables to change to factor
+factors<-c("diabetesBin", "highBP", "highChol", "cholCheck", "smoker", "stroke", "heartProb", "physAct", "fruits", "veg", "etOH", "hlthCare", "noDoc", "genHlth", "diffWalk", "sex", "age", "edu", "income")
+#create list of variables to change to integers
+integers<-c("bmi", "mentHlth", "physHlth")
+#use rename() to rename all variables for consistency and mutate() to change each list to appropriate data type
+data1 <- data |>
+  rename("diabetesBin" = "Diabetes_binary",
+         "highBP" = "HighBP",
+         "highChol" = "HighChol",
+         "cholCheck" = "CholCheck",
+         "bmi" = "BMI",
+         "smoker" = "Smoker",
+         "stroke" = "Stroke",
+         "heartProb" = "HeartDiseaseorAttack",
+         "physAct" = "PhysActivity",
+         "fruits" = "Fruits",
+         "veg" = "Veggies",
+         "etOH" = "HvyAlcoholConsump",
+         "hlthCare" ="AnyHealthcare",
+         "noDoc" = "NoDocbcCost",
+         "genHlth" = "GenHlth",
+         "mentHlth" = "MentHlth",
+         "physHlth" = "PhysHlth",
+         "diffWalk" = "DiffWalk",
+         "sex" = "Sex",
+         "age" = "Age",
+         "edu" = "Education",
+         "income" = "Income"
+         ) |>
+  mutate_at(factors, factor) |>
+  mutate_at(integers, as.integer)
+```
+
+We'll still should redefine some of the factors to have a value that helps us understand the dataset, but let's check everything out first to make sure it makes sense.
+```{r}
+str(data1)
+```
+Ok, everything is making sense!  Now we need to give some useful levels to the factors.  We'll use `fct_recode` for this purpose.  We will rely on the dataset description to assign numeric levels to character levels that help us understand the data a little more clearly.
+```{r}
+#create list of yes/no factors to be coded where 0=no, 1=yes
+yesNo <- c("diabetesBin", "highBP", "highChol", "cholCheck", "smoker", "stroke", "heartProb", "physAct", "fruits", "veg", "etOH", "hlthCare", "noDoc", "diffWalk")
+#mutate_at the list yesNo and equate 0 to no and 1 to yes.
+data2 <- data1 |> 
+  mutate_at(.vars = yesNo,
+            .funs = fct_recode,
+            "Yes" = "1",
+            "No" = "0")
+```
+Let's check quickly to see if that worked as expected...
+```{r}
+str(data2)
+```
+That appears as if we now have a Yes/No for each binary variable from our yesNo list above. Now, let's use `fct_recode` on the factors that are not binary and need a little more attention.
+```{r}
+data3 <- data2 |>
+  #define levels for genHlth
+  mutate(genHlth = fct_recode(genHlth,
+    "Excellent" = "1",
+    "Very Good" = "2",
+    "Good" = "3",
+    "Fair" = "4",
+    "Poor" = "5"),
+  #define levels for age
+         age = fct_recode(age,
+    "18 to 24" = "1",
+    "25 to 30" = "2",
+    "30 to 34" = "3",
+    "35 to 39" = "4",
+    "40 to 44" = "5",
+    "45 to 49" = "6",
+    "50 to 54" = "7",
+    "55 to 59" = "8",
+    "60 to 64" = "9",
+    "65 to 69" = "10",
+    "70 to 74" = "11",
+    "75 to 79" = "12",
+    "80 and Older" = "13"),
+  #define levels for edu
+         edu = fct_recode(edu,
+    "No School/Only Kindergarten" = "1",
+    "Grades 1-8" = "2",
+    "Grades 9-11" = "3",
+    "Grade 12/GED" = "4",
+    "College Years 1-3" = "5",
+    "College Years >=4" = "6"),
+  #define levels for income
+         income =fct_recode(income,
+    "Less than $10K" = "1",
+    "$10K to less than $15K" = "2",
+    "$15K to less than $20K" = "3",
+    "$20K to less than $25K" = "4",
+    "$25K to less than $35K" = "5",
+    "$35K to less than $50K" = "6",
+    "$50K to less than $75K" = "7",
+    "Greater than $75K" = "8")
+  )
+```
+Ok, that should be it for formatting, recoding and general data structure updates.  Let's check it out before moving on:
+```{r}
+str(data3)
+```
+Now let's take a look at the dataset itself:
+```{r}
+head(data3)
+```
+Ok, this looks as we expected.  The binary factors are Yes or No, the integer variables are <int>, more complex factors have the character string desciptors attached.  Let's move on to visualization.
+
