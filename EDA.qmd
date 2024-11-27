@@ -13,7 +13,7 @@ knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 
 # Exploratory Data Analysis for the Diabetes Health Indicators Dataset:
 
-Data were sourced from [Kaggle](https://www.kaggle.com/datasets/alexteboul/diabetes-health-indicators-dataset?resource=download).
+Data were sourced from [Kaggle](https://www.kaggle.com/datasets/alexteboul/diabetes-health-indicators-dataset?resource=download&select=diabetes_binary_health_indicators_BRFSS2015.csv).
 
 ## Introduction:
 
@@ -32,6 +32,7 @@ The data were downloaded from the source and saved locally on my hard drive. The
 The first step is to load libraries necessary for data exploration:
 
 ```{r}
+#load libraries used for EDA
 library(tidyverse)
 ```
 
@@ -61,6 +62,7 @@ str(data)
 All of the variables are numeric. Let's see what the actual data look like.
 
 ```{r}
+#check out first 6 rows of data
 head(data)
 ```
 
@@ -114,6 +116,7 @@ data1 <- data |>
 We'll still should redefine some of the factors to have a value that helps us understand the dataset, but let's check everything out first to make sure it makes sense.
 
 ```{r}
+#show data structure after coercion
 str(data1)
 ```
 
@@ -133,6 +136,7 @@ data2 <- data1 |>
 Let's check quickly to see if that worked as expected...
 
 ```{r}
+#show data structure after factor recoding
 str(data2)
 ```
 
@@ -180,6 +184,7 @@ data3 <- data2 |>
     "$35K to less than $50K" = "6",
     "$50K to less than $75K" = "7",
     "Greater than $75K" = "8"),
+   #define levels for sex
          sex = fct_recode(sex,
     "Female" = "0",
     "Male" = "1")
@@ -189,12 +194,14 @@ data3 <- data2 |>
 Ok, that should be it for formatting, recoding and general data structure updates. Let's check it out before moving on:
 
 ```{r}
+#check out data structure after definitions applied to factor levels
 str(data3)
 ```
 
 Now let's take a look at the dataset itself:
 
 ```{r}
+#show first 6 rows of data
 head(data3)
 ```
 
@@ -204,7 +211,7 @@ Ok, this looks as I expected. The binary factors are Yes or No, the integer vari
 Firstly, I had asked a question on the class discussion board on the modeling of the numeric values using factors or numerical values. From the responses in the class discussion board and in my own personal readings, it seems that these variables (mentHlth and physHlth) should be modeled as numeric inputs (if they were to be modeled).
 
 ```{r}
-#create bar chart fo mentHlth
+#create bar chart for mentHlth
 mentHlthChart<- ggplot(data3, aes(x=mentHlth),) +
   geom_bar(aes(y = after_stat(prop), group = 1))
 mentHlthChart
@@ -213,6 +220,7 @@ mentHlthChart
 Next, we'll plot the physHlth variable
 
 ```{r}
+#create bar chart for physHlth
 physHlthChart<- ggplot(data3, aes(x=physHlth),) +
   geom_bar(aes(y = after_stat(prop), group = 1))
 physHlthChart
@@ -322,10 +330,12 @@ The increase in smoking does not mean that people smoke more as they age.  It co
 
 How many of the respondents have diabetes?
 ```{r}
+#create contingency table of diabetes diagnoses
 table(data3$diabetesBin)
 ```
 How many males and how many females have/have had diabetes?
 ```{r}
+#create 2 way contingency table
 table(data3$diabetesBin, data3$sex)
 ```
 
@@ -355,14 +365,15 @@ nMale <- data3 |>
 posMalePct <- posMale/nMale*100
 #posMalePct
 
+#calculate # of females with diabetes
 posFem <- data3 |>
   filter((diabetesBin %in% "Yes" & sex %in% "Female")) |>
   nrow()
-#calculate total number of males
+#calculate total number of females
 nFem <- data3 |>
   filter(sex %in% "Female") |>
   nrow()
-#calculate percentage of males who have diabetes and create tibble for display
+#calculate percentage of females who have diabetes and create tibble for display
 posFemPct <- posFem/nFem*100
 #posFemPct
 #create tibble for data display
@@ -392,7 +403,7 @@ negActPct <- negAct/nAct*100
 
 We can also generate similar stats for other actionable factor variables using the `prop.table()` function. Let's check out some diet relationships with diabetes.
 ```{r}
-#generate contingency table and use addmargins() to get marginal percentages
+#generate contingency table and use prop.table to show percentages and addmargins() to get marginal percentages
 vegTable <- table(data3$diabetesBin, data3$veg)
 vegTablePct<- addmargins(prop.table(vegTable))
 vegTablePct
