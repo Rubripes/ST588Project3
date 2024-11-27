@@ -307,7 +307,7 @@ smokeAge <- ggplot(data3, aes(age, fill=smoker)) +
       title = "Respondents Who Have Smoke 100 or more Cigarettes in Their Lifetime")
 smokeAge
 ```
-It looks like older age groups have smoked more, and just under half of all respondents have smoke at least 100 cigarettes in their lifetimes.
+It looks like older age groups have smoked more, and just under half of all respondents have smoked at least 100 cigarettes in their lifetimes.
 
 Lastly, is diabetic diagnosis relative to age?
 ```{r}
