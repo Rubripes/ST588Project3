@@ -6,6 +6,11 @@ code-overflow: wrap
 editor: visual
 ---
 
+```{r setup, include=FALSE}
+#keep quiet on the warnings thrown, only warnings in this file were for library loads
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+```
+
 # Exploratory Data Analysis for the Diabetes Health Indicators Dataset:
 
 Data were sourced from [Kaggle](https://www.kaggle.com/datasets/alexteboul/diabetes-health-indicators-dataset?resource=download).
@@ -16,9 +21,9 @@ The prevalence of Diabetes has increased from 200 million to 830 million cases w
 
 The Behavioral Risk Factor Surveillance System (BRFSS) is a survey that is conducted annually by the CDC and responses are collected from over 400,000 Americans. This survery has been conducted yearly since 1984. The dataset to be analyzed for this project ("diabetes_binary_health_indicators_BRFSS2015.csv") contains 253,680 responses to the survey. ~~There are three dependent variable levels, **0=no diabetes or only during pregnancy**, **1=prediabetes**, and **2= diabetes**~~. There are two factor levels for the dependent variable; **0=no diabetes** and **1=diabetes**. There is class imbalance in the dataset and there are 21 feature variables. [Diabetes Health Indicators Dataset](https://www.kaggle.com/datasets/alexteboul/diabetes-health-indicators-dataset/?select=diabetes_binary_health_indicators_BRFSS2015.csv)
 
-Most of the variables appear to be factor type variables (e.g., numbers are used to encode a class), and they will be explored and reformatted during the EDA below.  In order to simplify the model fitting, I plan to explore "actionable" variables, or variables that the respondents can generally exert active control over in their lives (e.g.: Vegetable Consumption, Fruit Consumption, Smoking, Heavy Drinking, and Physical Activity), plus two intrinsic variables (Age and Sex).  Each of these feature variables is a binary variable (Yes/No, Male/Female), except age is a factor type variable with 13 levels and will need to be coerced to factor and renamed.  The dependent variable (`Diabetes_binary`) is also a binary variable that takes on "Yes" or "No".  A response of "Yes" means that the respondent has diabetes and a response of "No" means that the respondent does not have diabetes.  
+Most of the variables appear to be factor type variables (e.g., numbers are used to encode a class), and they will be explored and reformatted during the EDA below.  In order to simplify the model fitting, I plan to explore "actionable" variables, or variables that the respondents can generally exert active control over in their lives (e.g.: Vegetable Consumption, Fruit Consumption, Smoking, Heavy Drinking, and Physical Activity), plus two intrinsic variables (Age and Sex).  Each of these feature variables is a binary variable (Yes/No, Male/Female), except age is a factor type variable with 13 levels and will need to be coerced to factor and renamed.  The dependent variable (`Diabetes_binary`) is also a binary variable that takes on "Yes" or "No".  A response of "Yes" in the context of this dataset means that the respondent has diabetes and a response of "No" means that the respondent does not have diabetes.  
 
-The purpose of this EDA is to understand the structure of the entire dataset, reformat the raw data as appropriate for downstream model fitting, and to see if there are any theories that we can formulate just bey visualizing simple charts.  The data will eventually be evaluate two models (classification tree and random forest) by using 5-fold cross validation.  The overall goal of this will be to select the better model for predicting whether or not a respondent is at risk of diabetes using the `Diabetes_binary` variable.
+They purpose of this EDA is to understand the structure of the entire dataset, reformat the raw data as appropriate for downstream model fitting, and to see if there are any theories that we can formulate just by visualizing simple charts.  The data will eventually be evaluated in two models (classification tree and random forest) by using 5-fold cross validation.  The overall goal of this will be to tune and select the better model for predicting whether or not a respondent is at risk of diabetes using the variable described above.
 
 ## Data Import, Structure Evalution, and Reformatting:
 
@@ -500,7 +505,7 @@ Non-diabetics generally have a more active lifestyle than diabetics.  The propor
 
 Let's combine all of the variable proportions into a single tibble for ease of viewing the proportions side-by-side.
 ```{r}
-#rename all variables of the proportion tables to "healthy" or "unhealthy" so they can be bound into a single table. Use name index to rename all tables with the same syntax.
+#rename all variables of the proportion tables to "healthy" or "unhealthy" so they can be bound into a single table. Use name index to rename all tables with the same syntax.  Add a var$source identifier so that the source of each proportion is clear in final table.
 veg <- vegPropTab |>
   rename("healthy" = 1,
          "unhealthy" = 2)
