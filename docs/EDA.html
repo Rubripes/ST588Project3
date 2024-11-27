@@ -1,0 +1,1427 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Matthew Bray">
+
+<title>EDA</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-search-results"></div>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">EDA</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Matthew Bray </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="exploratory-data-analysis-for-the-diabetes-health-indicators-dataset" class="level1">
+<h1>Exploratory Data Analysis for the Diabetes Health Indicators Dataset:</h1>
+<p>Data were sourced from <a href="https://www.kaggle.com/datasets/alexteboul/diabetes-health-indicators-dataset?resource=download">Kaggle</a>.</p>
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction:</h2>
+<p>The prevalence of Diabetes has increased from 200 million to 830 million cases worldwide from 1990 to 2022. In 2021 diabetes and diabetes related complications were implicated in over 2 million deaths. <a href="https://www.who.int/news-room/fact-sheets/detail/diabetes">WHO</a></p>
+<p>The Behavioral Risk Factor Surveillance System (BRFSS) is a survey that is conducted annually by the CDC and responses are collected from over 400,000 Americans. This survery has been conducted yearly since 1984. The dataset to be analyzed for this project (“diabetes_binary_health_indicators_BRFSS2015.csv”) contains 253,680 responses to the survey. <del>There are three dependent variable levels, <strong>0=no diabetes or only during pregnancy</strong>, <strong>1=prediabetes</strong>, and <strong>2= diabetes</strong></del>. There are two factor levels for the dependent variable; <strong>0=no diabetes</strong> and <strong>1=diabetes</strong>. There is class imbalance in the dataset and there are 21 feature variables. <a href="https://www.kaggle.com/datasets/alexteboul/diabetes-health-indicators-dataset/?select=diabetes_binary_health_indicators_BRFSS2015.csv">Diabetes Health Indicators Dataset</a></p>
+<p>Most of the variables appear to be factor type variables (e.g., numbers are used to encode a class), and they will be explored and reformatted during the EDA below. In order to simplify the model fitting, I plan to explore “actionable” variables, or variables that the respondents can generally exert active control over in their lives (e.g.: Vegetable Consumption, Fruit Consumption, Smoking, Heavy Drinking, and Physical Activity), plus two intrinsic variables (Age and Sex). Each of these feature variables is a binary variable (Yes/No, Male/Female), except age is a factor type variable with 13 levels and will need to be coerced to factor and renamed. The dependent variable (<code>Diabetes_binary</code>) is also a binary variable that takes on “Yes” or “No”. A response of “Yes” means that the respondent has diabetes and a response of “No” means that the respondent does not have diabetes.</p>
+<p>The purpose of this EDA is to understand the structure of the entire dataset, reformat the raw data as appropriate for downstream model fitting, and to see if there are any theories that we can formulate just bey visualizing simple charts. The data will eventually be evaluate two models (classification tree and random forest) by using 5-fold cross validation. The overall goal of this will be to select the better model for predicting whether or not a respondent is at risk of diabetes using the <code>Diabetes_binary</code> variable.</p>
+</section>
+<section id="data-import-structure-evalution-and-reformatting" class="level2">
+<h2 class="anchored" data-anchor-id="data-import-structure-evalution-and-reformatting">Data Import, Structure Evalution, and Reformatting:</h2>
+<p>The data were downloaded from the source and saved locally on my hard drive. They will be imported below, evaluated, and formatted for the downstream uses of visualization and modelling.</p>
+<p>The first step is to load libraries necessary for data exploration:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'tidyverse' was built under R version 4.2.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'ggplot2' was built under R version 4.2.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'tibble' was built under R version 4.2.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'tidyr' was built under R version 4.2.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'readr' was built under R version 4.2.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'purrr' was built under R version 4.2.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'dplyr' was built under R version 4.2.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'stringr' was built under R version 4.2.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'forcats' was built under R version 4.2.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'lubridate' was built under R version 4.2.3</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.0
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+✔ purrr     1.0.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+</div>
+<p>Here we’ll read in the data using the readr::read_csv command</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#read csv file</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"../diabetes_binary_health_indicators_BRFSS2015.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 253680 Columns: 22
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+dbl (22): Diabetes_binary, HighBP, HighChol, CholCheck, BMI, Smoker, Stroke,...
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+</div>
+<p>Is there any missing data?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">#sum total number of rows where data is missing</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colSums</span>(<span class="fu">is.na</span>(data))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     Diabetes_binary               HighBP             HighChol 
+                   0                    0                    0 
+           CholCheck                  BMI               Smoker 
+                   0                    0                    0 
+              Stroke HeartDiseaseorAttack         PhysActivity 
+                   0                    0                    0 
+              Fruits              Veggies    HvyAlcoholConsump 
+                   0                    0                    0 
+       AnyHealthcare          NoDocbcCost              GenHlth 
+                   0                    0                    0 
+            MentHlth             PhysHlth             DiffWalk 
+                   0                    0                    0 
+                 Sex                  Age            Education 
+                   0                    0                    0 
+              Income 
+                   0 </code></pre>
+</div>
+</div>
+<p>No missing data! This matches the description of the data on the source webpage.</p>
+<p>Now that the data are in the R global environment, it will be useful to understand the variables and the data types they were assigned upon import and this will help us to think about how best to reformat the data for future steps. We’ll use a few commands to do this: <code>str()</code> will give us the overall structure and can help to visualize the number of values for categorical variables and <code>head()</code> will help us to see the first 6 rows of the data to further understand information provided by <code>str()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">#use str() to check out variable data types and values.</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>spc_tbl_ [253,680 × 22] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+ $ Diabetes_binary     : num [1:253680] 0 0 0 0 0 0 0 0 1 0 ...
+ $ HighBP              : num [1:253680] 1 0 1 1 1 1 1 1 1 0 ...
+ $ HighChol            : num [1:253680] 1 0 1 0 1 1 0 1 1 0 ...
+ $ CholCheck           : num [1:253680] 1 0 1 1 1 1 1 1 1 1 ...
+ $ BMI                 : num [1:253680] 40 25 28 27 24 25 30 25 30 24 ...
+ $ Smoker              : num [1:253680] 1 1 0 0 0 1 1 1 1 0 ...
+ $ Stroke              : num [1:253680] 0 0 0 0 0 0 0 0 0 0 ...
+ $ HeartDiseaseorAttack: num [1:253680] 0 0 0 0 0 0 0 0 1 0 ...
+ $ PhysActivity        : num [1:253680] 0 1 0 1 1 1 0 1 0 0 ...
+ $ Fruits              : num [1:253680] 0 0 1 1 1 1 0 0 1 0 ...
+ $ Veggies             : num [1:253680] 1 0 0 1 1 1 0 1 1 1 ...
+ $ HvyAlcoholConsump   : num [1:253680] 0 0 0 0 0 0 0 0 0 0 ...
+ $ AnyHealthcare       : num [1:253680] 1 0 1 1 1 1 1 1 1 1 ...
+ $ NoDocbcCost         : num [1:253680] 0 1 1 0 0 0 0 0 0 0 ...
+ $ GenHlth             : num [1:253680] 5 3 5 2 2 2 3 3 5 2 ...
+ $ MentHlth            : num [1:253680] 18 0 30 0 3 0 0 0 30 0 ...
+ $ PhysHlth            : num [1:253680] 15 0 30 0 0 2 14 0 30 0 ...
+ $ DiffWalk            : num [1:253680] 1 0 1 0 0 0 0 1 1 0 ...
+ $ Sex                 : num [1:253680] 0 0 0 0 0 1 0 0 0 1 ...
+ $ Age                 : num [1:253680] 9 7 9 11 11 10 9 11 9 8 ...
+ $ Education           : num [1:253680] 4 6 4 3 5 6 6 4 5 4 ...
+ $ Income              : num [1:253680] 3 1 8 6 4 8 7 4 1 3 ...
+ - attr(*, "spec")=
+  .. cols(
+  ..   Diabetes_binary = col_double(),
+  ..   HighBP = col_double(),
+  ..   HighChol = col_double(),
+  ..   CholCheck = col_double(),
+  ..   BMI = col_double(),
+  ..   Smoker = col_double(),
+  ..   Stroke = col_double(),
+  ..   HeartDiseaseorAttack = col_double(),
+  ..   PhysActivity = col_double(),
+  ..   Fruits = col_double(),
+  ..   Veggies = col_double(),
+  ..   HvyAlcoholConsump = col_double(),
+  ..   AnyHealthcare = col_double(),
+  ..   NoDocbcCost = col_double(),
+  ..   GenHlth = col_double(),
+  ..   MentHlth = col_double(),
+  ..   PhysHlth = col_double(),
+  ..   DiffWalk = col_double(),
+  ..   Sex = col_double(),
+  ..   Age = col_double(),
+  ..   Education = col_double(),
+  ..   Income = col_double()
+  .. )
+ - attr(*, "problems")=&lt;externalptr&gt; </code></pre>
+</div>
+</div>
+<p>All of the variables are numeric. Let’s see what the actual data look like.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 22
+  Diabetes_binary HighBP HighChol CholCheck   BMI Smoker Stroke
+            &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+1               0      1        1         1    40      1      0
+2               0      0        0         0    25      1      0
+3               0      1        1         1    28      0      0
+4               0      1        0         1    27      0      0
+5               0      1        1         1    24      0      0
+6               0      1        1         1    25      1      0
+# ℹ 15 more variables: HeartDiseaseorAttack &lt;dbl&gt;, PhysActivity &lt;dbl&gt;,
+#   Fruits &lt;dbl&gt;, Veggies &lt;dbl&gt;, HvyAlcoholConsump &lt;dbl&gt;, AnyHealthcare &lt;dbl&gt;,
+#   NoDocbcCost &lt;dbl&gt;, GenHlth &lt;dbl&gt;, MentHlth &lt;dbl&gt;, PhysHlth &lt;dbl&gt;,
+#   DiffWalk &lt;dbl&gt;, Sex &lt;dbl&gt;, Age &lt;dbl&gt;, Education &lt;dbl&gt;, Income &lt;dbl&gt;</code></pre>
+</div>
+</div>
+<p>We know from the description of the dataset that <code>Diabetes_binary</code> is is a factor type variable, with 0, 1, and 2 representing different diabetes “diagnoses”. We’ll use the descriptions provided with the data to format the dataset.</p>
+<p>I’d like to understand what values are available for the factor type variables in this dataset so that I can set values appropriate, or verify that they were set by R appropriately. The description of the <code>Diabetes_binary variable</code> appears to have three levels, but the chart immediately under it shows a binary response. <a href="https://www.kaggle.com/datasets/alexteboul/diabetes-health-indicators-dataset/?select=diabetes_binary_health_indicators_BRFSS2015.csv">Diabetes_binary</a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">#create count table of levels</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(data<span class="sc">$</span>Diabetes_binary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+     0      1 
+218334  35346 </code></pre>
+</div>
+</div>
+<p>Ok, the description on the webpage appears to be mis-specified. This does appear to be a binary response with two levels (0,1)</p>
+<p>Let’s change the factor type variables to factors in the dataset. We’ll create a list of the variables that we want to change to factors, then we’ll change the names of all the variables, then we’ll apply the factor list through the <code>factor()</code> function to selectively change the variables to <fctr>. We’ll also change a few variables to integers at the same time using the same logic and the as.interger function.</fctr></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">#create list of variables to change to factor</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>factors<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">"diabetesBin"</span>, <span class="st">"highBP"</span>, <span class="st">"highChol"</span>, <span class="st">"cholCheck"</span>, <span class="st">"smoker"</span>, <span class="st">"stroke"</span>, <span class="st">"heartProb"</span>, <span class="st">"physAct"</span>, <span class="st">"fruits"</span>, <span class="st">"veg"</span>, <span class="st">"etOH"</span>, <span class="st">"hlthCare"</span>, <span class="st">"noDoc"</span>, <span class="st">"genHlth"</span>, <span class="st">"diffWalk"</span>, <span class="st">"sex"</span>, <span class="st">"age"</span>, <span class="st">"edu"</span>, <span class="st">"income"</span>)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="co">#create list of variables to change to integers</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>integers<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">"bmi"</span>, <span class="st">"mentHlth"</span>, <span class="st">"physHlth"</span>)</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="co">#use rename() to rename all variables for consistency and mutate() to change each list to appropriate data type</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>data1 <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">"diabetesBin"</span> <span class="ot">=</span> <span class="st">"Diabetes_binary"</span>,</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>         <span class="st">"highBP"</span> <span class="ot">=</span> <span class="st">"HighBP"</span>,</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>         <span class="st">"highChol"</span> <span class="ot">=</span> <span class="st">"HighChol"</span>,</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>         <span class="st">"cholCheck"</span> <span class="ot">=</span> <span class="st">"CholCheck"</span>,</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>         <span class="st">"bmi"</span> <span class="ot">=</span> <span class="st">"BMI"</span>,</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>         <span class="st">"smoker"</span> <span class="ot">=</span> <span class="st">"Smoker"</span>,</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>         <span class="st">"stroke"</span> <span class="ot">=</span> <span class="st">"Stroke"</span>,</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>         <span class="st">"heartProb"</span> <span class="ot">=</span> <span class="st">"HeartDiseaseorAttack"</span>,</span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>         <span class="st">"physAct"</span> <span class="ot">=</span> <span class="st">"PhysActivity"</span>,</span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>         <span class="st">"fruits"</span> <span class="ot">=</span> <span class="st">"Fruits"</span>,</span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>         <span class="st">"veg"</span> <span class="ot">=</span> <span class="st">"Veggies"</span>,</span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>         <span class="st">"etOH"</span> <span class="ot">=</span> <span class="st">"HvyAlcoholConsump"</span>,</span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a>         <span class="st">"hlthCare"</span> <span class="ot">=</span><span class="st">"AnyHealthcare"</span>,</span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>         <span class="st">"noDoc"</span> <span class="ot">=</span> <span class="st">"NoDocbcCost"</span>,</span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>         <span class="st">"genHlth"</span> <span class="ot">=</span> <span class="st">"GenHlth"</span>,</span>
+<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a>         <span class="st">"mentHlth"</span> <span class="ot">=</span> <span class="st">"MentHlth"</span>,</span>
+<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>         <span class="st">"physHlth"</span> <span class="ot">=</span> <span class="st">"PhysHlth"</span>,</span>
+<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a>         <span class="st">"diffWalk"</span> <span class="ot">=</span> <span class="st">"DiffWalk"</span>,</span>
+<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a>         <span class="st">"sex"</span> <span class="ot">=</span> <span class="st">"Sex"</span>,</span>
+<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a>         <span class="st">"age"</span> <span class="ot">=</span> <span class="st">"Age"</span>,</span>
+<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a>         <span class="st">"edu"</span> <span class="ot">=</span> <span class="st">"Education"</span>,</span>
+<span id="cb23-28"><a href="#cb23-28" aria-hidden="true" tabindex="-1"></a>         <span class="st">"income"</span> <span class="ot">=</span> <span class="st">"Income"</span></span>
+<span id="cb23-29"><a href="#cb23-29" aria-hidden="true" tabindex="-1"></a>         ) <span class="sc">|&gt;</span></span>
+<span id="cb23-30"><a href="#cb23-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(factors, factor) <span class="sc">|&gt;</span></span>
+<span id="cb23-31"><a href="#cb23-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(integers, as.integer)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We’ll still should redefine some of the factors to have a value that helps us understand the dataset, but let’s check everything out first to make sure it makes sense.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(data1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tibble [253,680 × 22] (S3: tbl_df/tbl/data.frame)
+ $ diabetesBin: Factor w/ 2 levels "0","1": 1 1 1 1 1 1 1 1 2 1 ...
+ $ highBP     : Factor w/ 2 levels "0","1": 2 1 2 2 2 2 2 2 2 1 ...
+ $ highChol   : Factor w/ 2 levels "0","1": 2 1 2 1 2 2 1 2 2 1 ...
+ $ cholCheck  : Factor w/ 2 levels "0","1": 2 1 2 2 2 2 2 2 2 2 ...
+ $ bmi        : int [1:253680] 40 25 28 27 24 25 30 25 30 24 ...
+ $ smoker     : Factor w/ 2 levels "0","1": 2 2 1 1 1 2 2 2 2 1 ...
+ $ stroke     : Factor w/ 2 levels "0","1": 1 1 1 1 1 1 1 1 1 1 ...
+ $ heartProb  : Factor w/ 2 levels "0","1": 1 1 1 1 1 1 1 1 2 1 ...
+ $ physAct    : Factor w/ 2 levels "0","1": 1 2 1 2 2 2 1 2 1 1 ...
+ $ fruits     : Factor w/ 2 levels "0","1": 1 1 2 2 2 2 1 1 2 1 ...
+ $ veg        : Factor w/ 2 levels "0","1": 2 1 1 2 2 2 1 2 2 2 ...
+ $ etOH       : Factor w/ 2 levels "0","1": 1 1 1 1 1 1 1 1 1 1 ...
+ $ hlthCare   : Factor w/ 2 levels "0","1": 2 1 2 2 2 2 2 2 2 2 ...
+ $ noDoc      : Factor w/ 2 levels "0","1": 1 2 2 1 1 1 1 1 1 1 ...
+ $ genHlth    : Factor w/ 5 levels "1","2","3","4",..: 5 3 5 2 2 2 3 3 5 2 ...
+ $ mentHlth   : int [1:253680] 18 0 30 0 3 0 0 0 30 0 ...
+ $ physHlth   : int [1:253680] 15 0 30 0 0 2 14 0 30 0 ...
+ $ diffWalk   : Factor w/ 2 levels "0","1": 2 1 2 1 1 1 1 2 2 1 ...
+ $ sex        : Factor w/ 2 levels "0","1": 1 1 1 1 1 2 1 1 1 2 ...
+ $ age        : Factor w/ 13 levels "1","2","3","4",..: 9 7 9 11 11 10 9 11 9 8 ...
+ $ edu        : Factor w/ 6 levels "1","2","3","4",..: 4 6 4 3 5 6 6 4 5 4 ...
+ $ income     : Factor w/ 8 levels "1","2","3","4",..: 3 1 8 6 4 8 7 4 1 3 ...</code></pre>
+</div>
+</div>
+<p>Ok, everything is making sense! Now we need to give some useful levels to the factors. We’ll use <code>fct_recode</code> for this purpose. We will rely on the dataset description to assign numeric levels to character levels that help us understand the data a little more clearly.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">#create list of yes/no factors to be coded where 0=no, 1=yes</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>yesNo <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"diabetesBin"</span>, <span class="st">"highBP"</span>, <span class="st">"highChol"</span>, <span class="st">"cholCheck"</span>, <span class="st">"smoker"</span>, <span class="st">"stroke"</span>, <span class="st">"heartProb"</span>, <span class="st">"physAct"</span>, <span class="st">"fruits"</span>, <span class="st">"veg"</span>, <span class="st">"etOH"</span>, <span class="st">"hlthCare"</span>, <span class="st">"noDoc"</span>, <span class="st">"diffWalk"</span>)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="co">#mutate_at the list yesNo and equate 0 to no and 1 to yes.</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>data2 <span class="ot">&lt;-</span> data1 <span class="sc">|&gt;</span> </span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate_at</span>(<span class="at">.vars =</span> yesNo,</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">.funs =</span> fct_recode,</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Yes"</span> <span class="ot">=</span> <span class="st">"1"</span>,</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>            <span class="st">"No"</span> <span class="ot">=</span> <span class="st">"0"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s check quickly to see if that worked as expected…</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(data2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tibble [253,680 × 22] (S3: tbl_df/tbl/data.frame)
+ $ diabetesBin: Factor w/ 2 levels "No","Yes": 1 1 1 1 1 1 1 1 2 1 ...
+ $ highBP     : Factor w/ 2 levels "No","Yes": 2 1 2 2 2 2 2 2 2 1 ...
+ $ highChol   : Factor w/ 2 levels "No","Yes": 2 1 2 1 2 2 1 2 2 1 ...
+ $ cholCheck  : Factor w/ 2 levels "No","Yes": 2 1 2 2 2 2 2 2 2 2 ...
+ $ bmi        : int [1:253680] 40 25 28 27 24 25 30 25 30 24 ...
+ $ smoker     : Factor w/ 2 levels "No","Yes": 2 2 1 1 1 2 2 2 2 1 ...
+ $ stroke     : Factor w/ 2 levels "No","Yes": 1 1 1 1 1 1 1 1 1 1 ...
+ $ heartProb  : Factor w/ 2 levels "No","Yes": 1 1 1 1 1 1 1 1 2 1 ...
+ $ physAct    : Factor w/ 2 levels "No","Yes": 1 2 1 2 2 2 1 2 1 1 ...
+ $ fruits     : Factor w/ 2 levels "No","Yes": 1 1 2 2 2 2 1 1 2 1 ...
+ $ veg        : Factor w/ 2 levels "No","Yes": 2 1 1 2 2 2 1 2 2 2 ...
+ $ etOH       : Factor w/ 2 levels "No","Yes": 1 1 1 1 1 1 1 1 1 1 ...
+ $ hlthCare   : Factor w/ 2 levels "No","Yes": 2 1 2 2 2 2 2 2 2 2 ...
+ $ noDoc      : Factor w/ 2 levels "No","Yes": 1 2 2 1 1 1 1 1 1 1 ...
+ $ genHlth    : Factor w/ 5 levels "1","2","3","4",..: 5 3 5 2 2 2 3 3 5 2 ...
+ $ mentHlth   : int [1:253680] 18 0 30 0 3 0 0 0 30 0 ...
+ $ physHlth   : int [1:253680] 15 0 30 0 0 2 14 0 30 0 ...
+ $ diffWalk   : Factor w/ 2 levels "No","Yes": 2 1 2 1 1 1 1 2 2 1 ...
+ $ sex        : Factor w/ 2 levels "0","1": 1 1 1 1 1 2 1 1 1 2 ...
+ $ age        : Factor w/ 13 levels "1","2","3","4",..: 9 7 9 11 11 10 9 11 9 8 ...
+ $ edu        : Factor w/ 6 levels "1","2","3","4",..: 4 6 4 3 5 6 6 4 5 4 ...
+ $ income     : Factor w/ 8 levels "1","2","3","4",..: 3 1 8 6 4 8 7 4 1 3 ...</code></pre>
+</div>
+</div>
+<p>That appears as if we now have a Yes/No for each binary variable from our <code>yesNo</code> list above. Now, let’s use <code>fct_recode</code> on the factors that are not binary and need a little more attention.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>data3 <span class="ot">&lt;-</span> data2 <span class="sc">|&gt;</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">#define levels for genHlth</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">genHlth =</span> <span class="fu">fct_recode</span>(genHlth,</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Excellent"</span> <span class="ot">=</span> <span class="st">"1"</span>,</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Very Good"</span> <span class="ot">=</span> <span class="st">"2"</span>,</span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Good"</span> <span class="ot">=</span> <span class="st">"3"</span>,</span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Fair"</span> <span class="ot">=</span> <span class="st">"4"</span>,</span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Poor"</span> <span class="ot">=</span> <span class="st">"5"</span>),</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>  <span class="co">#define levels for age</span></span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>         <span class="at">age =</span> <span class="fu">fct_recode</span>(age,</span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">"18 to 24"</span> <span class="ot">=</span> <span class="st">"1"</span>,</span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"25 to 30"</span> <span class="ot">=</span> <span class="st">"2"</span>,</span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"30 to 34"</span> <span class="ot">=</span> <span class="st">"3"</span>,</span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>    <span class="st">"35 to 39"</span> <span class="ot">=</span> <span class="st">"4"</span>,</span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>    <span class="st">"40 to 44"</span> <span class="ot">=</span> <span class="st">"5"</span>,</span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>    <span class="st">"45 to 49"</span> <span class="ot">=</span> <span class="st">"6"</span>,</span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">"50 to 54"</span> <span class="ot">=</span> <span class="st">"7"</span>,</span>
+<span id="cb29-18"><a href="#cb29-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">"55 to 59"</span> <span class="ot">=</span> <span class="st">"8"</span>,</span>
+<span id="cb29-19"><a href="#cb29-19" aria-hidden="true" tabindex="-1"></a>    <span class="st">"60 to 64"</span> <span class="ot">=</span> <span class="st">"9"</span>,</span>
+<span id="cb29-20"><a href="#cb29-20" aria-hidden="true" tabindex="-1"></a>    <span class="st">"65 to 69"</span> <span class="ot">=</span> <span class="st">"10"</span>,</span>
+<span id="cb29-21"><a href="#cb29-21" aria-hidden="true" tabindex="-1"></a>    <span class="st">"70 to 74"</span> <span class="ot">=</span> <span class="st">"11"</span>,</span>
+<span id="cb29-22"><a href="#cb29-22" aria-hidden="true" tabindex="-1"></a>    <span class="st">"75 to 79"</span> <span class="ot">=</span> <span class="st">"12"</span>,</span>
+<span id="cb29-23"><a href="#cb29-23" aria-hidden="true" tabindex="-1"></a>    <span class="st">"80 and Older"</span> <span class="ot">=</span> <span class="st">"13"</span>),</span>
+<span id="cb29-24"><a href="#cb29-24" aria-hidden="true" tabindex="-1"></a>  <span class="co">#define levels for edu</span></span>
+<span id="cb29-25"><a href="#cb29-25" aria-hidden="true" tabindex="-1"></a>         <span class="at">edu =</span> <span class="fu">fct_recode</span>(edu,</span>
+<span id="cb29-26"><a href="#cb29-26" aria-hidden="true" tabindex="-1"></a>    <span class="st">"No School/Only Kindergarten"</span> <span class="ot">=</span> <span class="st">"1"</span>,</span>
+<span id="cb29-27"><a href="#cb29-27" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Grades 1-8"</span> <span class="ot">=</span> <span class="st">"2"</span>,</span>
+<span id="cb29-28"><a href="#cb29-28" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Grades 9-11"</span> <span class="ot">=</span> <span class="st">"3"</span>,</span>
+<span id="cb29-29"><a href="#cb29-29" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Grade 12/GED"</span> <span class="ot">=</span> <span class="st">"4"</span>,</span>
+<span id="cb29-30"><a href="#cb29-30" aria-hidden="true" tabindex="-1"></a>    <span class="st">"College Years 1-3"</span> <span class="ot">=</span> <span class="st">"5"</span>,</span>
+<span id="cb29-31"><a href="#cb29-31" aria-hidden="true" tabindex="-1"></a>    <span class="st">"College Years &gt;=4"</span> <span class="ot">=</span> <span class="st">"6"</span>),</span>
+<span id="cb29-32"><a href="#cb29-32" aria-hidden="true" tabindex="-1"></a>  <span class="co">#define levels for income</span></span>
+<span id="cb29-33"><a href="#cb29-33" aria-hidden="true" tabindex="-1"></a>         <span class="at">income =</span><span class="fu">fct_recode</span>(income,</span>
+<span id="cb29-34"><a href="#cb29-34" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Less than $10K"</span> <span class="ot">=</span> <span class="st">"1"</span>,</span>
+<span id="cb29-35"><a href="#cb29-35" aria-hidden="true" tabindex="-1"></a>    <span class="st">"$10K to less than $15K"</span> <span class="ot">=</span> <span class="st">"2"</span>,</span>
+<span id="cb29-36"><a href="#cb29-36" aria-hidden="true" tabindex="-1"></a>    <span class="st">"$15K to less than $20K"</span> <span class="ot">=</span> <span class="st">"3"</span>,</span>
+<span id="cb29-37"><a href="#cb29-37" aria-hidden="true" tabindex="-1"></a>    <span class="st">"$20K to less than $25K"</span> <span class="ot">=</span> <span class="st">"4"</span>,</span>
+<span id="cb29-38"><a href="#cb29-38" aria-hidden="true" tabindex="-1"></a>    <span class="st">"$25K to less than $35K"</span> <span class="ot">=</span> <span class="st">"5"</span>,</span>
+<span id="cb29-39"><a href="#cb29-39" aria-hidden="true" tabindex="-1"></a>    <span class="st">"$35K to less than $50K"</span> <span class="ot">=</span> <span class="st">"6"</span>,</span>
+<span id="cb29-40"><a href="#cb29-40" aria-hidden="true" tabindex="-1"></a>    <span class="st">"$50K to less than $75K"</span> <span class="ot">=</span> <span class="st">"7"</span>,</span>
+<span id="cb29-41"><a href="#cb29-41" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Greater than $75K"</span> <span class="ot">=</span> <span class="st">"8"</span>),</span>
+<span id="cb29-42"><a href="#cb29-42" aria-hidden="true" tabindex="-1"></a>         <span class="at">sex =</span> <span class="fu">fct_recode</span>(sex,</span>
+<span id="cb29-43"><a href="#cb29-43" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Female"</span> <span class="ot">=</span> <span class="st">"0"</span>,</span>
+<span id="cb29-44"><a href="#cb29-44" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Male"</span> <span class="ot">=</span> <span class="st">"1"</span>)</span>
+<span id="cb29-45"><a href="#cb29-45" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Ok, that should be it for formatting, recoding and general data structure updates. Let’s check it out before moving on:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(data3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>tibble [253,680 × 22] (S3: tbl_df/tbl/data.frame)
+ $ diabetesBin: Factor w/ 2 levels "No","Yes": 1 1 1 1 1 1 1 1 2 1 ...
+ $ highBP     : Factor w/ 2 levels "No","Yes": 2 1 2 2 2 2 2 2 2 1 ...
+ $ highChol   : Factor w/ 2 levels "No","Yes": 2 1 2 1 2 2 1 2 2 1 ...
+ $ cholCheck  : Factor w/ 2 levels "No","Yes": 2 1 2 2 2 2 2 2 2 2 ...
+ $ bmi        : int [1:253680] 40 25 28 27 24 25 30 25 30 24 ...
+ $ smoker     : Factor w/ 2 levels "No","Yes": 2 2 1 1 1 2 2 2 2 1 ...
+ $ stroke     : Factor w/ 2 levels "No","Yes": 1 1 1 1 1 1 1 1 1 1 ...
+ $ heartProb  : Factor w/ 2 levels "No","Yes": 1 1 1 1 1 1 1 1 2 1 ...
+ $ physAct    : Factor w/ 2 levels "No","Yes": 1 2 1 2 2 2 1 2 1 1 ...
+ $ fruits     : Factor w/ 2 levels "No","Yes": 1 1 2 2 2 2 1 1 2 1 ...
+ $ veg        : Factor w/ 2 levels "No","Yes": 2 1 1 2 2 2 1 2 2 2 ...
+ $ etOH       : Factor w/ 2 levels "No","Yes": 1 1 1 1 1 1 1 1 1 1 ...
+ $ hlthCare   : Factor w/ 2 levels "No","Yes": 2 1 2 2 2 2 2 2 2 2 ...
+ $ noDoc      : Factor w/ 2 levels "No","Yes": 1 2 2 1 1 1 1 1 1 1 ...
+ $ genHlth    : Factor w/ 5 levels "Excellent","Very Good",..: 5 3 5 2 2 2 3 3 5 2 ...
+ $ mentHlth   : int [1:253680] 18 0 30 0 3 0 0 0 30 0 ...
+ $ physHlth   : int [1:253680] 15 0 30 0 0 2 14 0 30 0 ...
+ $ diffWalk   : Factor w/ 2 levels "No","Yes": 2 1 2 1 1 1 1 2 2 1 ...
+ $ sex        : Factor w/ 2 levels "Female","Male": 1 1 1 1 1 2 1 1 1 2 ...
+ $ age        : Factor w/ 13 levels "18 to 24","25 to 30",..: 9 7 9 11 11 10 9 11 9 8 ...
+ $ edu        : Factor w/ 6 levels "No School/Only Kindergarten",..: 4 6 4 3 5 6 6 4 5 4 ...
+ $ income     : Factor w/ 8 levels "Less than $10K",..: 3 1 8 6 4 8 7 4 1 3 ...</code></pre>
+</div>
+</div>
+<p>Now let’s take a look at the dataset itself:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 22
+  diabetesBin highBP highChol cholCheck   bmi smoker stroke heartProb physAct
+  &lt;fct&gt;       &lt;fct&gt;  &lt;fct&gt;    &lt;fct&gt;     &lt;int&gt; &lt;fct&gt;  &lt;fct&gt;  &lt;fct&gt;     &lt;fct&gt;  
+1 No          Yes    Yes      Yes          40 Yes    No     No        No     
+2 No          No     No       No           25 Yes    No     No        Yes    
+3 No          Yes    Yes      Yes          28 No     No     No        No     
+4 No          Yes    No       Yes          27 No     No     No        Yes    
+5 No          Yes    Yes      Yes          24 No     No     No        Yes    
+6 No          Yes    Yes      Yes          25 Yes    No     No        Yes    
+# ℹ 13 more variables: fruits &lt;fct&gt;, veg &lt;fct&gt;, etOH &lt;fct&gt;, hlthCare &lt;fct&gt;,
+#   noDoc &lt;fct&gt;, genHlth &lt;fct&gt;, mentHlth &lt;int&gt;, physHlth &lt;int&gt;, diffWalk &lt;fct&gt;,
+#   sex &lt;fct&gt;, age &lt;fct&gt;, edu &lt;fct&gt;, income &lt;fct&gt;</code></pre>
+</div>
+</div>
+<p>Ok, this looks as I expected. The binary factors are Yes or No, the integer variables are integers, and more complex factors have the character string descriptors attached to each level. Let’s move on to visualization.</p>
+</section>
+<section id="visualization-with-plots" class="level2">
+<h2 class="anchored" data-anchor-id="visualization-with-plots">Visualization with Plots</h2>
+<p>Firstly, I had asked a question on the class discussion board on the modeling of the numeric values using factors or numerical values. From the responses in the class discussion board and in my own personal readings, it seems that these variables (mentHlth and physHlth) should be modeled as numeric inputs (if they were to be modeled).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co">#create bar chart fo mentHlth</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>mentHlthChart<span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data3, <span class="fu">aes</span>(<span class="at">x=</span>mentHlth),) <span class="sc">+</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(prop), <span class="at">group =</span> <span class="dv">1</span>))</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>mentHlthChart</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="EDA_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Next, we’ll plot the physHlth variable</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>physHlthChart<span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data3, <span class="fu">aes</span>(<span class="at">x=</span>physHlth),) <span class="sc">+</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">after_stat</span>(prop), <span class="at">group =</span> <span class="dv">1</span>))</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>physHlthChart</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="EDA_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>These are both interesting plots. For both variables, there are major peaks at 0 and 30. In addition, it almost appears as if there are small, local peaks at multiples of 5 which leads me to think that these scales may not be as useful as desired and respondents may be providing “easy” number estimates. We won’t explore these variables further in this analysis since these do not fit with what I’d like to explore…variables that can be generally be directly controlled by the individual. Physical health and Mental Health may or may not be under the control of the person.</p>
+<p>How is age associated with directly actionable variables? Let’s start with physAct. Do people do less physical activity as they get older?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co">#create bar chart that shows percentage of respondents who have performed phycical activity in the last 30 days vs. those who have not at each age level.</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>actAge <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data3, <span class="fu">aes</span>(age, <span class="at">fill=</span>physAct)) <span class="sc">+</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">position=</span><span class="st">"fill"</span>) <span class="sc">+</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Age Group"</span>,</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> <span class="st">"Fraction of Respondents"</span>,</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">title =</span> <span class="st">"Respondents Who Have Done Physical Activity in the Last 30 Days"</span>)</span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>actAge</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="EDA_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>It does appear as if the overall activity level decreases as the respondents get older. Let’s explore the association of Age with other actionable variables. Do respondents generally “get healthier” as they get older?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co">#create bar chart that shows percentage of respondents who consume vegetables at least once a day vs. those who have not at each age level.</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>vegAge <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data3, <span class="fu">aes</span>(age, <span class="at">fill=</span>veg)) <span class="sc">+</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">position=</span><span class="st">"fill"</span>) <span class="sc">+</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Age Group"</span>,</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> <span class="st">"Fraction of Respondents"</span>,</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">title =</span> <span class="st">"Respondents Who Consume Vegetables Once A Day"</span>)</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>vegAge</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="EDA_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The changes in vegetable consumption by age group appear small. Next, let’s look at fruit consumption by age group.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co">#create bar chart that shows percentage of respondents who consume fruits at least once a day vs. those who have not at each age level.</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>fruitAge <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data3, <span class="fu">aes</span>(age, <span class="at">fill=</span>fruits)) <span class="sc">+</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">position=</span><span class="st">"fill"</span>) <span class="sc">+</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Age Group"</span>,</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> <span class="st">"Fraction of Respondents"</span>,</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">title =</span> <span class="st">"Respondents Who Consume Fruit Once A Day"</span>)</span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>fruitAge</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="EDA_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>It looks like fruit consumption has a slight positive trend as age increases. Now let’s look at some things that are deemed “unhealthy”. Does excessive drinking decrease with age?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co">#create bar chart that shows percentage of respondents who are heavy drinkers vs. those who are not at each age level.</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>etOHAge <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data3, <span class="fu">aes</span>(age, <span class="at">fill=</span>etOH)) <span class="sc">+</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">position=</span><span class="st">"fill"</span>) <span class="sc">+</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Age Group"</span>,</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> <span class="st">"Fraction of Respondents"</span>,</span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">title =</span> <span class="st">"Respondents Who Are Heavy Drinkers"</span>)</span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a>etOHAge</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="EDA_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This is difficult to visualize any trends, as any changes appear small. There may be evidence that older respondents drink less overall. Maybe we can see a diffence if we seperate by sex.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co">#create bar chart that shows percentage of respondents who are heavy alcohol consumers vs. those who are not at each age level and by sex.</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>etOHAgeSex <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data3, <span class="fu">aes</span>(age, <span class="at">fill=</span>etOH)) <span class="sc">+</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">position=</span><span class="st">"fill"</span>) <span class="sc">+</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Age Group"</span>,</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> <span class="st">"Fraction of Respondents"</span>,</span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">title =</span> <span class="st">"Respondents Who Are Heavy Drinkers"</span>) <span class="sc">+</span></span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(sex))</span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>etOHAgeSex</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="EDA_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>There does not appear to be much difference between the sexes.</p>
+<p>Let’s look at the smoking response. Does the act of smoking at least 100 cigarettes in your lifetime increase with age?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co">#create bar chart that shows percentage of respondents who have smoke at least 100 cigarettes vs. those who have not at each age level.</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>smokeAge <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data3, <span class="fu">aes</span>(age, <span class="at">fill=</span>smoker)) <span class="sc">+</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">position=</span><span class="st">"fill"</span>) <span class="sc">+</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Age Group"</span>,</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> <span class="st">"Fraction of Respondents"</span>,</span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">title =</span> <span class="st">"Respondents Who Have Smoke 100 or more Cigarettes in Their Lifetime"</span>)</span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>smokeAge</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="EDA_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>It looks like older age groups have smoked more, and just under half of all respondents have smoke at least 100 cigarettes in their lifetimes.</p>
+<p>Lastly, is diabetic diagnosis relative to age?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co">#create bar chart that shows percentage of respondents who have been diagnosed with diabetes vs. those who have not at each age level.</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>diagAge <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data3, <span class="fu">aes</span>(age, <span class="at">fill=</span>diabetesBin)) <span class="sc">+</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">position=</span><span class="st">"fill"</span>) <span class="sc">+</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Age Group"</span>,</span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> <span class="st">"Fraction of Respondents"</span>,</span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">title =</span> <span class="st">"Respondents Who Are/Have Been Diagnosed with Diabetes"</span>)</span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>diagAge</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="EDA_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>It appears that diabetes increases with age group. The previous charts have shown various trajectories for “healthy” habits relative to age. For instance, the prevalence of physical activity outside of work decreases with age. The changes in consumption of fruits and vegetables is hard to see if there is any meaningful change from these visuals. Heavy drinking decreases with age and smoking increases with age group. Hopefully our numeric summaries and modeling can create more rigorous and convincing interpretations of these predictors on risk of diabetes.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The increase in smoking does not mean that people smoke more as they age. It could mean that or it mean that society’s views on smoking have changed and smokers are moving towards aging out of the population.</p>
+</div>
+</div>
+</section>
+<section id="now-lets-explore-some-numerical-summaries." class="level2">
+<h2 class="anchored" data-anchor-id="now-lets-explore-some-numerical-summaries.">Now, let’s explore some numerical summaries.</h2>
+<p>How many of the respondents have diabetes?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(data3<span class="sc">$</span>diabetesBin)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    No    Yes 
+218334  35346 </code></pre>
+</div>
+</div>
+<p>How many males and how many females have/have had diabetes?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(data3<span class="sc">$</span>diabetesBin, data3<span class="sc">$</span>sex)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     
+      Female   Male
+  No  123563  94771
+  Yes  18411  16935</code></pre>
+</div>
+</div>
+<p>Let’s calculate a percentage of respondents who have diabetes.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co">#this code will count 'yes' responses in diabetesBin and divide by total rows (there is no missing data) to generate a percentage of respondents that responded 'yes" to having diabetes.</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>pos <span class="ot">&lt;-</span> data3 <span class="sc">|&gt;</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>((diabetesBin <span class="sc">%in%</span> <span class="st">"Yes"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nrow</span>()</span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>diabetesPct <span class="ot">&lt;-</span> pos<span class="sc">/</span><span class="fu">nrow</span>(data3)<span class="sc">*</span><span class="dv">100</span></span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a><span class="co">#diabetesPct</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Approximately 14% of respondents overall have or have had diabetes in some form.</p>
+<p>Is there a diabetes risk associated with sex? We saw above the numbers of males and females with and without diabetes. Let’s calculate proporation of diabetics for each sex.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co">#calculate # of males with diabetes</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>posMale <span class="ot">&lt;-</span> data3 <span class="sc">|&gt;</span></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>((diabetesBin <span class="sc">%in%</span> <span class="st">"Yes"</span> <span class="sc">&amp;</span> sex <span class="sc">%in%</span> <span class="st">"Male"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nrow</span>()</span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a><span class="co">#calculate total number of males</span></span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>nMale <span class="ot">&lt;-</span> data3 <span class="sc">|&gt;</span></span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(sex <span class="sc">%in%</span> <span class="st">"Male"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nrow</span>()</span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a><span class="co">#calculate percentage of males who have diabetes</span></span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>posMalePct <span class="ot">&lt;-</span> posMale<span class="sc">/</span>nMale<span class="sc">*</span><span class="dv">100</span></span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a><span class="co">#posMalePct</span></span>
+<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-13"><a href="#cb48-13" aria-hidden="true" tabindex="-1"></a>posFem <span class="ot">&lt;-</span> data3 <span class="sc">|&gt;</span></span>
+<span id="cb48-14"><a href="#cb48-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>((diabetesBin <span class="sc">%in%</span> <span class="st">"Yes"</span> <span class="sc">&amp;</span> sex <span class="sc">%in%</span> <span class="st">"Female"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb48-15"><a href="#cb48-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nrow</span>()</span>
+<span id="cb48-16"><a href="#cb48-16" aria-hidden="true" tabindex="-1"></a><span class="co">#calculate total number of males</span></span>
+<span id="cb48-17"><a href="#cb48-17" aria-hidden="true" tabindex="-1"></a>nFem <span class="ot">&lt;-</span> data3 <span class="sc">|&gt;</span></span>
+<span id="cb48-18"><a href="#cb48-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(sex <span class="sc">%in%</span> <span class="st">"Female"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb48-19"><a href="#cb48-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nrow</span>()</span>
+<span id="cb48-20"><a href="#cb48-20" aria-hidden="true" tabindex="-1"></a><span class="co">#calculate percentage of males who have diabetes and create tibble for display</span></span>
+<span id="cb48-21"><a href="#cb48-21" aria-hidden="true" tabindex="-1"></a>posFemPct <span class="ot">&lt;-</span> posFem<span class="sc">/</span>nFem<span class="sc">*</span><span class="dv">100</span></span>
+<span id="cb48-22"><a href="#cb48-22" aria-hidden="true" tabindex="-1"></a><span class="co">#posFemPct</span></span>
+<span id="cb48-23"><a href="#cb48-23" aria-hidden="true" tabindex="-1"></a><span class="co">#create tibble for data display</span></span>
+<span id="cb48-24"><a href="#cb48-24" aria-hidden="true" tabindex="-1"></a>posPcts <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(<span class="fu">cbind</span>(posMalePct, posFemPct))</span>
+<span id="cb48-25"><a href="#cb48-25" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(posPcts) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"% Males with Diabetes"</span>, <span class="st">"% Females with Diabetes"</span>)</span>
+<span id="cb48-26"><a href="#cb48-26" aria-hidden="true" tabindex="-1"></a>posPcts</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 2
+  `% Males with Diabetes` `% Females with Diabetes`
+                    &lt;dbl&gt;                     &lt;dbl&gt;
+1                    15.2                      13.0</code></pre>
+</div>
+</div>
+<p>Approximately 15% of Male respondents have/have had diabetes and approximately 13% of Female respondents have/have had diabetes. It seems that males may be slightly more at risk of developing the condition.</p>
+</section>
+<section id="lets-see-if-there-are-any-other-simple-relationships-that-we-can-evaluate-with-regard-to-the-actionable-variables." class="level2">
+<h2 class="anchored" data-anchor-id="lets-see-if-there-are-any-other-simple-relationships-that-we-can-evaluate-with-regard-to-the-actionable-variables.">Let’s see if there are any other simple relationships that we can evaluate with regard to the “actionable” variables.</h2>
+<p>Below, we’ll check out if physical activity helps derisk diabetes.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co">#calculate number of people without diabetes who have also been active in the past 30 days.</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>negAct <span class="ot">&lt;-</span> data3 <span class="sc">|&gt;</span></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>((diabetesBin <span class="sc">%in%</span> <span class="st">"No"</span> <span class="sc">&amp;</span> physAct <span class="sc">%in%</span> <span class="st">"Yes"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nrow</span>()</span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a><span class="co">#calculate total number of respondents who were active in the last 30 days.</span></span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>nAct <span class="ot">&lt;-</span> data3 <span class="sc">|&gt;</span></span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(physAct <span class="sc">%in%</span> <span class="st">"Yes"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nrow</span>()</span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a><span class="co">#calculate percentage of active respondents who do not have diabetes</span></span>
+<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a>negActPct <span class="ot">&lt;-</span> negAct<span class="sc">/</span>nAct<span class="sc">*</span><span class="dv">100</span></span>
+<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a><span class="co">#negActPct</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>88% of respondents who have been active in the past 30 days do not have and have not had diabetes. This doesn’t really mean much by itself. We’ll see further down how this compares to non-active responders.</p>
+<p>We can also generate similar stats for other actionable factor variables using the <code>prop.table()</code> function. Let’s check out some diet relationships with diabetes.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co">#generate contingency table and use addmargins() to get marginal percentages</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>vegTable <span class="ot">&lt;-</span> <span class="fu">table</span>(data3<span class="sc">$</span>diabetesBin, data3<span class="sc">$</span>veg)</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>vegTablePct<span class="ot">&lt;-</span> <span class="fu">addmargins</span>(<span class="fu">prop.table</span>(vegTable))</span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>vegTablePct</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     
+             No       Yes       Sum
+  No  0.1546397 0.7060273 0.8606670
+  Yes 0.0339404 0.1053926 0.1393330
+  Sum 0.1885801 0.8114199 1.0000000</code></pre>
+</div>
+</div>
+<p>This is a little difficult to interpret because both variable levels are “YES” and “NO”. However, the behavior of the <code>table()</code> function puts the first argument on the y-axis and the second argument on the x-axis. It is also difficult to make sense any these percentages, since they are percentages of the total responses. We can generate ratios for combinations of values from each variable.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co">#proportion of healthy choice associated with diabetes, and proportion of unhealthy choice associated with diabetes.</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>posVegProp <span class="ot">&lt;-</span> vegTablePct[<span class="dv">2</span>,<span class="dv">2</span>]<span class="sc">/</span>vegTablePct[<span class="dv">3</span>,<span class="dv">2</span>]</span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a><span class="co">#posVegProp</span></span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a><span class="co">#proportion of respondents who choose unhealthy activities who were diagnosed with diabetes</span></span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>posNoVegProp <span class="ot">&lt;-</span> vegTablePct[<span class="dv">2</span>,<span class="dv">1</span>]<span class="sc">/</span>vegTablePct[<span class="dv">3</span>,<span class="dv">1</span>]</span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a><span class="co">#posNoVegProp</span></span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a><span class="co">#create tibble of ratios and rename columns for display.</span></span>
+<span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a>vegPropTab <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(<span class="fu">cbind</span>(posVegProp, posNoVegProp))</span>
+<span id="cb53-10"><a href="#cb53-10" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(vegPropTab) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Vegetable Eaters With Diabetes"</span>, <span class="st">"Non-Vegetable Eaters With Diabetes"</span>)</span>
+<span id="cb53-11"><a href="#cb53-11" aria-hidden="true" tabindex="-1"></a><span class="co">#vegPropTab</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The proportion of people who ate vegetables and developed diabetes is lower than the proportion of people who did not eat vegetables and developed diabetes. Let’s evaluate this same ratio for fruit consumption.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="co">#generate contingency table and use addmargins() to get marginal percentages</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>fruitTable <span class="ot">&lt;-</span> <span class="fu">table</span>(data3<span class="sc">$</span>diabetesBin, data3<span class="sc">$</span>fruits)</span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>fruitTablePct<span class="ot">&lt;-</span> <span class="fu">addmargins</span>(<span class="fu">prop.table</span>(fruitTable))</span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>fruitTablePct</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     
+              No        Yes        Sum
+  No  0.30798250 0.55268448 0.86066698
+  Yes 0.05776175 0.08157127 0.13933302
+  Sum 0.36574424 0.63425576 1.00000000</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="co">#proportion of healthy choice associated with diabetes, and proportion of unhealthy choice associated with diabetes.</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>posFruitProp <span class="ot">&lt;-</span> fruitTablePct[<span class="dv">2</span>,<span class="dv">2</span>]<span class="sc">/</span>fruitTablePct[<span class="dv">3</span>,<span class="dv">2</span>]</span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a><span class="co">#posFruitProp</span></span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a><span class="co">#proportion of respondents who choose unhealthy activities who were diagnosed with diabetes</span></span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a>posNoFruitProp <span class="ot">&lt;-</span> fruitTablePct[<span class="dv">2</span>,<span class="dv">1</span>]<span class="sc">/</span>fruitTablePct[<span class="dv">3</span>,<span class="dv">1</span>]</span>
+<span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a><span class="co">#posNoFruitProp</span></span>
+<span id="cb56-7"><a href="#cb56-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-8"><a href="#cb56-8" aria-hidden="true" tabindex="-1"></a><span class="co">#create tibble of ratios and rename columns for display.</span></span>
+<span id="cb56-9"><a href="#cb56-9" aria-hidden="true" tabindex="-1"></a>fruitPropTab <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(<span class="fu">cbind</span>(posFruitProp, posNoFruitProp))</span>
+<span id="cb56-10"><a href="#cb56-10" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(fruitPropTab) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Fruit Eaters With Diabetes"</span>, <span class="st">"Non-Fruit Eaters With Diabetes"</span>)</span>
+<span id="cb56-11"><a href="#cb56-11" aria-hidden="true" tabindex="-1"></a>fruitPropTab</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 2
+  `Fruit Eaters With Diabetes` `Non-Fruit Eaters With Diabetes`
+                         &lt;dbl&gt;                            &lt;dbl&gt;
+1                        0.129                            0.158</code></pre>
+</div>
+</div>
+<p>The proportion of people who ate fruit and developed diabetes is lower than the proportion of people who did not eat vegetables and developed diabetes.</p>
+<p>Let’s move on to the activities that are commonly labeled as “risky,” smoking and drinking and calculate similar proportions.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="co">#generate contingency table and use addmargins() to get marginal percentages</span></span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>smokeTable <span class="ot">&lt;-</span> <span class="fu">table</span>(data3<span class="sc">$</span>diabetesBin, data3<span class="sc">$</span>smoker)</span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>smokeTablePct<span class="ot">&lt;-</span> <span class="fu">addmargins</span>(<span class="fu">prop.table</span>(smokeTable))</span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>smokeTablePct</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     
+              No        Yes        Sum
+  No  0.48970356 0.37096342 0.86066698
+  Yes 0.06712788 0.07220514 0.13933302
+  Sum 0.55683144 0.44316856 1.00000000</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="co">#proportion of healthy lifestyle choice for diabetics and proportion of unhealthy choice for diabetics, switching logic to have same order of "good:bad".</span></span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>posNoSmokeProp <span class="ot">&lt;-</span> smokeTablePct[<span class="dv">2</span>,<span class="dv">1</span>]<span class="sc">/</span>smokeTablePct[<span class="dv">3</span>,<span class="dv">1</span>]</span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a><span class="co">#posNoSmokeProp</span></span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a><span class="co">#proportion of respondents who choose unhealthy activities who were diagnosed with diabetes</span></span>
+<span id="cb60-5"><a href="#cb60-5" aria-hidden="true" tabindex="-1"></a>posSmokeProp <span class="ot">&lt;-</span> smokeTablePct[<span class="dv">2</span>,<span class="dv">2</span>]<span class="sc">/</span>smokeTablePct[<span class="dv">3</span>,<span class="dv">2</span>]</span>
+<span id="cb60-6"><a href="#cb60-6" aria-hidden="true" tabindex="-1"></a><span class="co">#posSmokeProp</span></span>
+<span id="cb60-7"><a href="#cb60-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-8"><a href="#cb60-8" aria-hidden="true" tabindex="-1"></a><span class="co">#create tibble of ratios and rename columns for display.</span></span>
+<span id="cb60-9"><a href="#cb60-9" aria-hidden="true" tabindex="-1"></a>smokePropTab <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(<span class="fu">cbind</span>(posNoSmokeProp, posSmokeProp))</span>
+<span id="cb60-10"><a href="#cb60-10" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(smokePropTab) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Non-smokers With Diabetes"</span>, <span class="st">"Smokers With Diabetes"</span>)</span>
+<span id="cb60-11"><a href="#cb60-11" aria-hidden="true" tabindex="-1"></a>smokePropTab</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 2
+  `Non-smokers With Diabetes` `Smokers With Diabetes`
+                        &lt;dbl&gt;                   &lt;dbl&gt;
+1                       0.121                   0.163</code></pre>
+</div>
+</div>
+<p>The proportion of people who did not smoke at least 100 cigarettes in their lifetime and developed diabetes is lower than the proportion of people who did smoke that many cigarettes and developed diabetes.</p>
+<p>Now we’ll explore the choice of heavy alcohol consumption and its relationship to diabetes.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="co">#generate contingency table and use addmargins() to get marginal percentages</span></span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>etOHTable <span class="ot">&lt;-</span> <span class="fu">table</span>(data3<span class="sc">$</span>diabetesBin, data3<span class="sc">$</span>etOH)</span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>etOHTablePct<span class="ot">&lt;-</span> <span class="fu">addmargins</span>(<span class="fu">prop.table</span>(etOHTable))</span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a>etOHTablePct</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     
+               No         Yes         Sum
+  No  0.807749921 0.052917061 0.860666982
+  Yes 0.136053295 0.003279722 0.139333018
+  Sum 0.943803217 0.056196783 1.000000000</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="co">#proportion of healthy lifestyle choice for diabetics and proportion of unhealthy choice for diabetics, switching logic to have same order of "good:bad".</span></span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>posNoetOHProp <span class="ot">&lt;-</span> etOHTablePct[<span class="dv">2</span>,<span class="dv">1</span>]<span class="sc">/</span>etOHTablePct[<span class="dv">3</span>,<span class="dv">1</span>]</span>
+<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a><span class="co">#posNoSmokeProp</span></span>
+<span id="cb64-4"><a href="#cb64-4" aria-hidden="true" tabindex="-1"></a><span class="co">#proportion of respondents who choose unhealthy activities who were diagnosed with diabetes</span></span>
+<span id="cb64-5"><a href="#cb64-5" aria-hidden="true" tabindex="-1"></a>posetOHProp <span class="ot">&lt;-</span> etOHTablePct[<span class="dv">2</span>,<span class="dv">2</span>]<span class="sc">/</span>etOHTablePct[<span class="dv">3</span>,<span class="dv">2</span>]</span>
+<span id="cb64-6"><a href="#cb64-6" aria-hidden="true" tabindex="-1"></a><span class="co">#posetOHProp</span></span>
+<span id="cb64-7"><a href="#cb64-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-8"><a href="#cb64-8" aria-hidden="true" tabindex="-1"></a><span class="co">#create tibble of ratios and rename columns for display.</span></span>
+<span id="cb64-9"><a href="#cb64-9" aria-hidden="true" tabindex="-1"></a>etOHPropTab <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(<span class="fu">cbind</span>(posNoetOHProp, posetOHProp))</span>
+<span id="cb64-10"><a href="#cb64-10" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(etOHPropTab) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Non-Bingers With Diabetes"</span>, <span class="st">"Bingers With Diabetes"</span>)</span>
+<span id="cb64-11"><a href="#cb64-11" aria-hidden="true" tabindex="-1"></a>etOHPropTab</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 2
+  `Non-Bingers With Diabetes` `Bingers With Diabetes`
+                        &lt;dbl&gt;                   &lt;dbl&gt;
+1                       0.144                  0.0584</code></pre>
+</div>
+</div>
+<p>Overall, the proportion of people who did not drink heavily (“binge”) is higher than the proportion of those who did binge and develop diabetes. I did not expect this.</p>
+<p>We already calculated similar proportions above for <code>physAct</code>, but let’s do it here again in the same format as the other variables so that we can combine all the tables into a single table for ease of visualization.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="co">#generate contingency table and use addmargins() to get marginal percentages</span></span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>actTable <span class="ot">&lt;-</span> <span class="fu">table</span>(data3<span class="sc">$</span>diabetesBin, data3<span class="sc">$</span>physAct)</span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>actTablePct<span class="ot">&lt;-</span> <span class="fu">addmargins</span>(<span class="fu">prop.table</span>(actTable))</span>
+<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a>actTablePct</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     
+              No        Yes        Sum
+  No  0.19197808 0.66868890 0.86066698
+  Yes 0.05147824 0.08785478 0.13933302
+  Sum 0.24345632 0.75654368 1.00000000</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="co">#proportion of healthy choice associated with diabetes, and proportion of unhealthy choice associated with diabetes..</span></span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>posActProp <span class="ot">&lt;-</span> actTablePct[<span class="dv">2</span>,<span class="dv">2</span>]<span class="sc">/</span>actTablePct[<span class="dv">3</span>,<span class="dv">2</span>]</span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a><span class="co">#posActProp</span></span>
+<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a><span class="co">#proportion of respondents who choose unhealthy activities who were diagnosed with diabetes</span></span>
+<span id="cb68-5"><a href="#cb68-5" aria-hidden="true" tabindex="-1"></a>posNoActProp <span class="ot">&lt;-</span> actTablePct[<span class="dv">2</span>,<span class="dv">1</span>]<span class="sc">/</span>actTablePct[<span class="dv">3</span>,<span class="dv">1</span>]</span>
+<span id="cb68-6"><a href="#cb68-6" aria-hidden="true" tabindex="-1"></a><span class="co">#posNoActProp</span></span>
+<span id="cb68-7"><a href="#cb68-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-8"><a href="#cb68-8" aria-hidden="true" tabindex="-1"></a><span class="co">#create tibble of ratios and rename columns for display.</span></span>
+<span id="cb68-9"><a href="#cb68-9" aria-hidden="true" tabindex="-1"></a>actPropTab <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(<span class="fu">cbind</span>(posActProp, posNoActProp))</span>
+<span id="cb68-10"><a href="#cb68-10" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(actPropTab) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Active People With Diabetes"</span>, <span class="st">"Non-Active People With Diabetes"</span>)</span>
+<span id="cb68-11"><a href="#cb68-11" aria-hidden="true" tabindex="-1"></a>actPropTab</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 2
+  `Active People With Diabetes` `Non-Active People With Diabetes`
+                          &lt;dbl&gt;                             &lt;dbl&gt;
+1                         0.116                             0.211</code></pre>
+</div>
+</div>
+<p>Non-diabetics generally have a more active lifestyle than diabetics. The proportion of non-active people who develop diabetes is almost double the proportion of active people who develop the disease.</p>
+<p>Let’s combine all of the variable proportions into a single tibble for ease of viewing the proportions side-by-side.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="co">#rename all variables of the proportion tables to "healthy" or "unhealthy" so they can be bound into a single table. Use name index to rename all tables with the same syntax.</span></span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>veg <span class="ot">&lt;-</span> vegPropTab <span class="sc">|&gt;</span></span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">"healthy"</span> <span class="ot">=</span> <span class="dv">1</span>,</span>
+<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a>         <span class="st">"unhealthy"</span> <span class="ot">=</span> <span class="dv">2</span>)</span>
+<span id="cb70-5"><a href="#cb70-5" aria-hidden="true" tabindex="-1"></a>veg<span class="sc">$</span>source <span class="ot">&lt;-</span> <span class="st">"veg"</span></span>
+<span id="cb70-6"><a href="#cb70-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-7"><a href="#cb70-7" aria-hidden="true" tabindex="-1"></a>fruit <span class="ot">&lt;-</span> fruitPropTab <span class="sc">|&gt;</span></span>
+<span id="cb70-8"><a href="#cb70-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">"healthy"</span> <span class="ot">=</span> <span class="dv">1</span>,</span>
+<span id="cb70-9"><a href="#cb70-9" aria-hidden="true" tabindex="-1"></a>         <span class="st">"unhealthy"</span> <span class="ot">=</span> <span class="dv">2</span>)</span>
+<span id="cb70-10"><a href="#cb70-10" aria-hidden="true" tabindex="-1"></a>fruit<span class="sc">$</span>source <span class="ot">&lt;-</span> <span class="st">"fruit"</span></span>
+<span id="cb70-11"><a href="#cb70-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-12"><a href="#cb70-12" aria-hidden="true" tabindex="-1"></a>smoke <span class="ot">&lt;-</span> smokePropTab <span class="sc">|&gt;</span></span>
+<span id="cb70-13"><a href="#cb70-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">"healthy"</span> <span class="ot">=</span> <span class="dv">1</span>,</span>
+<span id="cb70-14"><a href="#cb70-14" aria-hidden="true" tabindex="-1"></a>         <span class="st">"unhealthy"</span> <span class="ot">=</span> <span class="dv">2</span>)</span>
+<span id="cb70-15"><a href="#cb70-15" aria-hidden="true" tabindex="-1"></a>smoke<span class="sc">$</span>source <span class="ot">&lt;-</span> <span class="st">"smoker"</span></span>
+<span id="cb70-16"><a href="#cb70-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-17"><a href="#cb70-17" aria-hidden="true" tabindex="-1"></a>etOH <span class="ot">&lt;-</span> etOHPropTab <span class="sc">|&gt;</span></span>
+<span id="cb70-18"><a href="#cb70-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">"healthy"</span> <span class="ot">=</span> <span class="dv">1</span>,</span>
+<span id="cb70-19"><a href="#cb70-19" aria-hidden="true" tabindex="-1"></a>         <span class="st">"unhealthy"</span> <span class="ot">=</span> <span class="dv">2</span>)</span>
+<span id="cb70-20"><a href="#cb70-20" aria-hidden="true" tabindex="-1"></a>etOH<span class="sc">$</span>source <span class="ot">&lt;-</span> <span class="st">"drinker"</span></span>
+<span id="cb70-21"><a href="#cb70-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-22"><a href="#cb70-22" aria-hidden="true" tabindex="-1"></a>act <span class="ot">&lt;-</span> actPropTab <span class="sc">|&gt;</span></span>
+<span id="cb70-23"><a href="#cb70-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">"healthy"</span> <span class="ot">=</span> <span class="dv">1</span>,</span>
+<span id="cb70-24"><a href="#cb70-24" aria-hidden="true" tabindex="-1"></a>         <span class="st">"unhealthy"</span> <span class="ot">=</span> <span class="dv">2</span>)</span>
+<span id="cb70-25"><a href="#cb70-25" aria-hidden="true" tabindex="-1"></a>act<span class="sc">$</span>source <span class="ot">&lt;-</span> <span class="st">"active"</span></span>
+<span id="cb70-26"><a href="#cb70-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-27"><a href="#cb70-27" aria-hidden="true" tabindex="-1"></a><span class="co">#combine all tables into singel table</span></span>
+<span id="cb70-28"><a href="#cb70-28" aria-hidden="true" tabindex="-1"></a>propTable <span class="ot">&lt;-</span> <span class="fu">rbind</span>(veg, fruit, smoke, etOH, act)</span>
+<span id="cb70-29"><a href="#cb70-29" aria-hidden="true" tabindex="-1"></a>propTable</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 3
+  healthy unhealthy source 
+    &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;  
+1   0.130    0.180  veg    
+2   0.129    0.158  fruit  
+3   0.121    0.163  smoker 
+4   0.144    0.0584 drinker
+5   0.116    0.211  active </code></pre>
+</div>
+</div>
+<section id="discussion-and-summary-of-eda" class="level3">
+<h3 class="anchored" data-anchor-id="discussion-and-summary-of-eda">Discussion and Summary of EDA</h3>
+<p>This last tibble compares the proportions of respondents who have chosen healthy options who have developed diabetes against the proportions of respondents who have non chosen healthy options who have developed diabetes. On the surface, it seems that you could potentially pick the healthy choice in 4/5 categories and have a lower risk of developing diabetes. However, the alcohol variable is perplexing. Additionally, each of these proportions is calculated “in a vacuum” in the sense that they do not take other variables into consideration. The regression tree and random forest models should take care of that and help us to understand if any of the variables are more important than others when understanding risk of developing diabetes and how lifestyle choices can impact that outcome.</p>
+
+
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
