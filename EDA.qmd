@@ -21,9 +21,9 @@ The prevalence of Diabetes has increased from 200 million to 830 million cases w
 
 The Behavioral Risk Factor Surveillance System (BRFSS) is a survey that is conducted annually by the CDC and responses are collected from over 400,000 Americans. This survery has been conducted yearly since 1984. The dataset to be analyzed for this project ("diabetes_binary_health_indicators_BRFSS2015.csv") contains 253,680 responses to the survey. ~~There are three dependent variable levels, **0=no diabetes or only during pregnancy**, **1=prediabetes**, and **2= diabetes**~~. There are two factor levels for the dependent variable; **0=no diabetes** and **1=diabetes**. There is class imbalance in the dataset and there are 21 feature variables. [Diabetes Health Indicators Dataset](https://www.kaggle.com/datasets/alexteboul/diabetes-health-indicators-dataset/?select=diabetes_binary_health_indicators_BRFSS2015.csv)
 
-Most of the variables appear to be factor type variables (e.g., numbers are used to encode a class), and they will be explored and reformatted during the EDA below.  In order to simplify the model fitting, I plan to explore "actionable" variables, or variables that the respondents can generally exert active control over in their lives (e.g.: Vegetable Consumption, Fruit Consumption, Smoking, Heavy Drinking, and Physical Activity), plus two intrinsic variables (Age and Sex).  Each of these feature variables is a binary variable (Yes/No, Male/Female), except age is a factor type variable with 13 levels and will need to be coerced to factor and renamed.  The dependent variable (`Diabetes_binary`) is also a binary variable that takes on "Yes" or "No".  A response of "Yes" in the context of this dataset means that the respondent has diabetes and a response of "No" means that the respondent does not have diabetes.  
+Most of the variables appear to be factor type variables (e.g., numbers are used to encode a class), and they will be explored and reformatted during the EDA below. In order to simplify the model fitting, I plan to explore "actionable" variables, or variables that the respondents can generally exert active control over in their lives (e.g.: Vegetable Consumption, Fruit Consumption, Smoking, Heavy Drinking, and Physical Activity), plus two intrinsic variables (Age and Sex). Each of these feature variables is a binary variable (Yes/No, Male/Female), except age is a factor type variable with 13 levels and will need to be coerced to factor and renamed. The dependent variable (`Diabetes_binary`) is also a binary variable that takes on "Yes" or "No". A response of "Yes" in the context of this dataset means that the respondent has diabetes and a response of "No" means that the respondent does not have diabetes.
 
-They purpose of this EDA is to understand the structure of the entire dataset, reformat the raw data as appropriate for downstream model fitting, and to see if there are any theories that we can formulate just by visualizing simple charts.  The data will eventually be evaluated in two models (classification tree and random forest) by using 5-fold cross validation.  The overall goal of this will be to tune and select the better model for predicting whether or not a respondent is at risk of diabetes using the variable described above.
+They purpose of this EDA is to understand the structure of the entire dataset, reformat the raw data as appropriate for downstream model fitting, and to see if there are any theories that we can formulate just by visualizing simple charts. The data will eventually be evaluated in two models (classification tree and random forest) by using 5-fold cross validation. The overall goal of this will be to tune and select the better model for predicting whether or not a respondent is at risk of diabetes using the variable described above.
 
 ## Data Import, Structure Evalution, and Reformatting:
 
@@ -208,6 +208,7 @@ head(data3)
 Ok, this looks as I expected. The binary factors are Yes or No, the integer variables are integers, and more complex factors have the character string descriptors attached to each level. Let's move on to visualization.
 
 ## Visualization with Plots
+
 Firstly, I had asked a question on the class discussion board on the modeling of the numeric values using factors or numerical values. From the responses in the class discussion board and in my own personal readings, it seems that these variables (mentHlth and physHlth) should be modeled as numeric inputs (if they were to be modeled).
 
 ```{r}
@@ -226,7 +227,7 @@ physHlthChart<- ggplot(data3, aes(x=physHlth),) +
 physHlthChart
 ```
 
-These are both interesting plots. For both variables, there are major peaks at 0 and 30. In addition, it almost appears as if there are small, local peaks at multiples of 5 which leads me to think that these scales may not be as useful as desired and respondents may be providing "easy" number estimates.  We won't explore these variables further in this analysis since these do not fit with what I'd like to explore...variables that can be generally be directly controlled by the individual.  Physical health and Mental Health may or may not be under the control of the person.
+These are both interesting plots. For both variables, there are major peaks at 0 and 30. In addition, it almost appears as if there are small, local peaks at multiples of 5 which leads me to think that these scales may not be as useful as desired and respondents may be providing "easy" number estimates. We won't explore these variables further in this analysis since these do not fit with what I'd like to explore...variables that can be generally be directly controlled by the individual. Physical health and Mental Health may or may not be under the control of the person.
 
 How is age associated with directly actionable variables? Let's start with physAct. Do people do less physical activity as they get older?
 
@@ -296,7 +297,8 @@ etOHAgeSex
 
 There does not appear to be much difference between the sexes.
 
-Let's look at the smoking response.  Does the act of smoking at least 100 cigarettes in your lifetime increase with age?
+Let's look at the smoking response. Does the act of smoking at least 100 cigarettes in your lifetime increase with age?
+
 ```{r}
 #create bar chart that shows percentage of respondents who have smoke at least 100 cigarettes vs. those who have not at each age level.
 smokeAge <- ggplot(data3, aes(age, fill=smoker)) +
@@ -307,9 +309,11 @@ smokeAge <- ggplot(data3, aes(age, fill=smoker)) +
       title = "Respondents Who Have Smoke 100 or more Cigarettes in Their Lifetime")
 smokeAge
 ```
+
 It looks like older age groups have smoked more, and just under half of all respondents have smoked at least 100 cigarettes in their lifetimes.
 
 Lastly, is diabetic diagnosis relative to age?
+
 ```{r}
 #create bar chart that shows percentage of respondents who have been diagnosed with diabetes vs. those who have not at each age level.
 diagAge <- ggplot(data3, aes(age, fill=diabetesBin)) +
@@ -320,27 +324,31 @@ diagAge <- ggplot(data3, aes(age, fill=diabetesBin)) +
       title = "Respondents Who Are/Have Been Diagnosed with Diabetes")
 diagAge
 ```
-It appears that diabetes increases with age group.  The previous charts have shown various trajectories for "healthy" habits relative to age.  For instance, the prevalence of physical activity outside of work decreases with age.  The changes in consumption of fruits and vegetables is hard to see if there is any meaningful change from these visuals.  Heavy drinking decreases with age and smoking increases with age group.  Hopefully our numeric summaries and modeling can create more rigorous and convincing interpretations of these predictors on risk of diabetes.
 
-::: {.callout-note}
-The increase in smoking does not mean that people smoke more as they age.  It could mean that or it mean that society's views on smoking have changed and smokers are moving towards aging out of the population.
+It appears that diabetes increases with age group. The previous charts have shown various trajectories for "healthy" habits relative to age. For instance, the prevalence of physical activity outside of work decreases with age. The changes in consumption of fruits and vegetables is hard to see if there is any meaningful change from these visuals. Heavy drinking decreases with age and smoking increases with age group. Hopefully our numeric summaries and modeling can create more rigorous and convincing interpretations of these predictors on risk of diabetes.
+
+::: callout-note
+The increase in smoking does not mean that people smoke more as they age. It could mean that or it mean that society's views on smoking have changed and smokers are moving towards aging out of the population.
 :::
 
-## Now, let's explore some numerical summaries. 
+## Now, let's explore some numerical summaries.
 
 How many of the respondents have diabetes?
+
 ```{r}
 #create contingency table of diabetes diagnoses
 table(data3$diabetesBin)
 ```
+
 How many males and how many females have/have had diabetes?
+
 ```{r}
 #create 2 way contingency table
 table(data3$diabetesBin, data3$sex)
 ```
 
-
 Let's calculate a percentage of respondents who have diabetes.
+
 ```{r}
 #this code will count 'yes' responses in diabetesBin and divide by total rows (there is no missing data) to generate a percentage of respondents that responded 'yes" to having diabetes.
 pos <- data3 |>
@@ -349,9 +357,11 @@ pos <- data3 |>
 diabetesPct <- pos/nrow(data3)*100
 #diabetesPct
 ```
+
 Approximately `r round(diabetesPct, 0)`% of respondents overall have or have had diabetes in some form.
 
-Is there a diabetes risk associated with sex?  We saw above the numbers of males and females with and without diabetes.  Let's calculate proporation of diabetics for each sex.
+Is there a diabetes risk associated with sex? We saw above the numbers of males and females with and without diabetes. Let's calculate proporation of diabetics for each sex.
+
 ```{r}
 #calculate # of males with diabetes
 posMale <- data3 |>
@@ -381,11 +391,13 @@ posPcts <- as_tibble(cbind(posMalePct, posFemPct))
 names(posPcts) <- c("% Males with Diabetes", "% Females with Diabetes")
 posPcts
 ```
-Approximately `r round(posMalePct, 0)`% of Male respondents have/have had diabetes and approximately `r round(posFemPct, 0)`% of Female respondents have/have had diabetes.  It seems that males may be slightly more at risk of developing the condition.
+
+Approximately `r round(posMalePct, 0)`% of Male respondents have/have had diabetes and approximately `r round(posFemPct, 0)`% of Female respondents have/have had diabetes. It seems that males may be slightly more at risk of developing the condition.
 
 ## Let's see if there are any other simple relationships that we can evaluate with regard to the "actionable" variables.
 
 Below, we'll check out if physical activity helps derisk diabetes.
+
 ```{r}
 #calculate number of people without diabetes who have also been active in the past 30 days.
 negAct <- data3 |>
@@ -399,16 +411,19 @@ nAct <- data3 |>
 negActPct <- negAct/nAct*100
 #negActPct
 ```
-`r round(negActPct, 0)`% of respondents who have been active in the past 30 days do not have and have not had diabetes.  This doesn't really mean much by itself.  We'll see further down how this compares to non-active responders.
+
+`r round(negActPct, 0)`% of respondents who have been active in the past 30 days do not have and have not had diabetes. This doesn't really mean much by itself. We'll see further down how this compares to non-active responders.
 
 We can also generate similar stats for other actionable factor variables using the `prop.table()` function. Let's check out some diet relationships with diabetes.
+
 ```{r}
 #generate contingency table and use prop.table to show percentages and addmargins() to get marginal percentages
 vegTable <- table(data3$diabetesBin, data3$veg)
 vegTablePct<- addmargins(prop.table(vegTable))
 vegTablePct
 ```
-This is a little difficult to interpret because both variable levels are "YES" and "NO".  However, the behavior of the `table()` function puts the first argument on the y-axis and the second argument on the x-axis.  It is also difficult to make sense any these percentages, since they are percentages of the total responses.  We can generate ratios for combinations of values from each variable. 
+
+This is a little difficult to interpret because both variable levels are "YES" and "NO". However, the behavior of the `table()` function puts the first argument on the y-axis and the second argument on the x-axis. It is also difficult to make sense any these percentages, since they are percentages of the total responses. We can generate ratios for combinations of values from each variable.
 
 ```{r}
 #proportion of healthy choice associated with diabetes, and proportion of unhealthy choice associated with diabetes.
@@ -423,7 +438,8 @@ vegPropTab <- as_tibble(cbind(posVegProp, posNoVegProp))
 names(vegPropTab) <- c("Vegetable Eaters With Diabetes", "Non-Vegetable Eaters With Diabetes")
 #vegPropTab
 ```
-The proportion of people who ate vegetables and developed diabetes is lower than the proportion of people who did not eat vegetables and developed diabetes.  Let's evaluate this same ratio for fruit consumption.
+
+The proportion of people who ate vegetables and developed diabetes is lower than the proportion of people who did not eat vegetables and developed diabetes. Let's evaluate this same ratio for fruit consumption.
 
 ```{r}
 #generate contingency table and use addmargins() to get marginal percentages
@@ -431,6 +447,7 @@ fruitTable <- table(data3$diabetesBin, data3$fruits)
 fruitTablePct<- addmargins(prop.table(fruitTable))
 fruitTablePct
 ```
+
 ```{r}
 #proportion of healthy choice associated with diabetes, and proportion of unhealthy choice associated with diabetes.
 posFruitProp <- fruitTablePct[2,2]/fruitTablePct[3,2]
@@ -444,15 +461,18 @@ fruitPropTab <- as_tibble(cbind(posFruitProp, posNoFruitProp))
 names(fruitPropTab) <- c("Fruit Eaters With Diabetes", "Non-Fruit Eaters With Diabetes")
 fruitPropTab
 ```
+
 The proportion of people who ate fruit and developed diabetes is lower than the proportion of people who did not eat vegetables and developed diabetes.
 
 Let's move on to the activities that are commonly labeled as "risky," smoking and drinking and calculate similar proportions.
+
 ```{r}
 #generate contingency table and use addmargins() to get marginal percentages
 smokeTable <- table(data3$diabetesBin, data3$smoker)
 smokeTablePct<- addmargins(prop.table(smokeTable))
 smokeTablePct
 ```
+
 ```{r}
 #proportion of healthy lifestyle choice for diabetics and proportion of unhealthy choice for diabetics, switching logic to have same order of "good:bad".
 posNoSmokeProp <- smokeTablePct[2,1]/smokeTablePct[3,1]
@@ -466,15 +486,18 @@ smokePropTab <- as_tibble(cbind(posNoSmokeProp, posSmokeProp))
 names(smokePropTab) <- c("Non-smokers With Diabetes", "Smokers With Diabetes")
 smokePropTab
 ```
+
 The proportion of people who did not smoke at least 100 cigarettes in their lifetime and developed diabetes is lower than the proportion of people who did smoke that many cigarettes and developed diabetes.
 
 Now we'll explore the choice of heavy alcohol consumption and its relationship to diabetes.
+
 ```{r}
 #generate contingency table and use addmargins() to get marginal percentages
 etOHTable <- table(data3$diabetesBin, data3$etOH)
 etOHTablePct<- addmargins(prop.table(etOHTable))
 etOHTablePct
 ```
+
 ```{r}
 #proportion of healthy lifestyle choice for diabetics and proportion of unhealthy choice for diabetics, switching logic to have same order of "good:bad".
 posNoetOHProp <- etOHTablePct[2,1]/etOHTablePct[3,1]
@@ -488,7 +511,8 @@ etOHPropTab <- as_tibble(cbind(posNoetOHProp, posetOHProp))
 names(etOHPropTab) <- c("Non-Bingers With Diabetes", "Bingers With Diabetes")
 etOHPropTab
 ```
-Overall, the proportion of people who did not drink heavily ("binge") is higher than the proportion of those who did binge and develop diabetes.  I did not expect this.
+
+Overall, the proportion of people who did not drink heavily ("binge") is higher than the proportion of those who did binge and develop diabetes. I did not expect this.
 
 We already calculated similar proportions above for `physAct`, but let's do it here again in the same format as the other variables so that we can combine all the tables into a single table for ease of visualization.
 
@@ -512,9 +536,11 @@ actPropTab <- as_tibble(cbind(posActProp, posNoActProp))
 names(actPropTab) <- c("Active People With Diabetes", "Non-Active People With Diabetes")
 actPropTab
 ```
-Non-diabetics generally have a more active lifestyle than diabetics.  The proportion of non-active people who develop diabetes is almost double the proportion of active people who develop the disease.
+
+Non-diabetics generally have a more active lifestyle than diabetics. The proportion of non-active people who develop diabetes is almost double the proportion of active people who develop the disease.
 
 Let's combine all of the variable proportions into a single tibble for ease of viewing the proportions side-by-side.
+
 ```{r}
 #rename all variables of the proportion tables to "healthy" or "unhealthy" so they can be bound into a single table. Use name index to rename all tables with the same syntax.  Add a var$source identifier so that the source of each proportion is clear in final table.
 veg <- vegPropTab |>
@@ -546,7 +572,9 @@ act$source <- "active"
 propTable <- rbind(veg, fruit, smoke, etOH, act)
 propTable
 ```
+
 ### Discussion and Summary of EDA
-This last tibble compares the proportions of respondents who have chosen healthy options who have developed diabetes against the proportions of respondents who have non chosen healthy options who have developed diabetes.  On the surface, it seems that you could potentially pick the healthy choice in 4/5 categories and have a lower risk of developing diabetes.  However, the alcohol variable is perplexing.  Additionally, each of these proportions is calculated "in a vacuum" in the sense that they do not take other variables into consideration.  The regression tree and random forest models should take care of that and help us to understand if any of the variables are more important than others when understanding risk of developing diabetes and how lifestyle choices can impact that outcome.
 
+This last tibble compares the proportions of respondents who have chosen healthy options who have developed diabetes against the proportions of respondents who have non chosen healthy options who have developed diabetes. On the surface, it seems that you could potentially pick the healthy choice in 4/5 categories and have a lower risk of developing diabetes. However, the alcohol variable is perplexing. Additionally, each of these proportions is calculated "in a vacuum" in the sense that they do not take other variables into consideration. The regression tree and random forest models should take care of that and help us to understand if any of the variables are more important than others when understanding risk of developing diabetes and how lifestyle choices can impact that outcome.
 
+Click here to get to the [modeling](https://rubripes.github.io/ST588Project3/Modeling.html) page.
