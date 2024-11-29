@@ -7,3 +7,15 @@ editor: visual
 ---
 
 # Evaluation and Testing of Classification Tree and Random Forest Models on the Diabetes Health Indicators Dataset
+
+Data were sourced from [Kaggle](https://www.kaggle.com/datasets/alexteboul/diabetes-health-indicators-dataset?resource=download&select=diabetes_binary_health_indicators_BRFSS2015.csv).  The data were previously explored and reformatted in the Exploratory Data Analysis file
+
+## Introduction:
+
+The prevalence of Diabetes has increased from 200 million to 830 million cases worldwide from 1990 to 2022. In 2021 diabetes and diabetes related complications were implicated in over 2 million deaths. [WHO](https://www.who.int/news-room/fact-sheets/detail/diabetes)
+
+The Behavioral Risk Factor Surveillance System (BRFSS) is a survey that is conducted annually by the CDC and responses are collected from over 400,000 Americans. This survery has been conducted yearly since 1984. The dataset to be analyzed for this project ("diabetes_binary_health_indicators_BRFSS2015.csv") contains 253,680 responses to the survey. ~~There are three dependent variable levels, **0=no diabetes or only during pregnancy**, **1=prediabetes**, and **2= diabetes**~~. There are two factor levels for the dependent variable; **0=no diabetes** and **1=diabetes**. There is class imbalance in the dataset and there are 21 feature variables. [Diabetes Health Indicators Dataset](https://www.kaggle.com/datasets/alexteboul/diabetes-health-indicators-dataset/?select=diabetes_binary_health_indicators_BRFSS2015.csv)
+
+Most of the variables appear to be factor type variables (e.g., numbers are used to encode a class), and they were explored and reformatted during the EDA previously. In order to simplify the model fitting, I will explore "actionable" variables, or variables that the respondents can generally exert active control over in their lives (e.g.: Vegetable Consumption, Fruit Consumption, Smoking, Heavy Drinking, and Physical Activity), plus two intrinsic variables (Age and Sex). Each of these feature variables is a binary variable (Yes/No, Male/Female), except age is a factor type variable with 13 levels and was coerced to factor and values were renamed. The dependent variable (`Diabetes_binary`) is also a binary variable that takes on "Yes" or "No". A response of "Yes" in the context of this dataset means that the respondent has diabetes and a response of "No" means that the respondent does not have diabetes.
+
+They purpose of this modeling is to tune and compare regression tree and random forest models using 5 fold cross validation.  The dataset will be randomly split into a training and test set.  The models will be trained on the training dataset, then the best model from each family will be evaluated on the test dataset to then decide which model predicts unseen data the best.
