@@ -8,7 +8,7 @@ editor: visual
 
 ```{r setup, include=FALSE}
 #keep quiet on the warnings thrown, only warnings in this file were for library loads
-knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+#knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
 ```
 
 # Evaluation and Testing of Classification Tree and Random Forest Models on the Diabetes Health Indicators Dataset
@@ -275,7 +275,6 @@ tree_final_model <- extract_workflow(tree_final_fit)
 treeFinalPlot <- tree_final_model %>%
   extract_fit_engine() %>%
   rpart.plot::rpart.plot(roundint = FALSE)
-treeFinalPlot
 ```
 The classification tree only created a single leaf containing 100% of the data, as minimum log-loss is at this node.  This is not very useful, even though it is somewhat accurate (~86%).  Once the model is fit, it doesn't allow for any more partitioning from the full dataset.  This doesn't tell us anything more than we already were able to ascertain from the EDA.  Perhaps the Random Forest will give us some more insight by testing the smaller subsets of predictors with each partition.
 
