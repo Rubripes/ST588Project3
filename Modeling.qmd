@@ -6,6 +6,11 @@ code-overflow: wrap
 editor: visual
 ---
 
+```{r setup, include=FALSE}
+#keep quiet on the warnings thrown, only warnings in this file were for library loads
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+```
+
 # Evaluation and Testing of Classification Tree and Random Forest Models on the Diabetes Health Indicators Dataset
 
 Data were sourced from [Kaggle](https://www.kaggle.com/datasets/alexteboul/diabetes-health-indicators-dataset?resource=download&select=diabetes_binary_health_indicators_BRFSS2015.csv).  The data were previously explored and reformatted in the Exploratory Data Analysis file.  They are imported and re-formatted using the same code in this page for reproducibility.
@@ -218,7 +223,7 @@ Then, we'll plot the `tree_fits` metrics that were estimated in during fitting a
 
 ```{r}
 #plot accuracy and mn_log_loss by cost_complexity across tree depths
-tree_fits %>%
+treeFitTune <- tree_fits %>%
   collect_metrics() %>%
   mutate(tree_depth = factor(tree_depth)) %>%
   ggplot(aes(cost_complexity, mean, color = tree_depth)) +
@@ -227,6 +232,7 @@ tree_fits %>%
   facet_wrap(~ .metric, scales = "free", nrow=2) +
   scale_x_log10(labels = scales::label_number()) +
   scale_color_viridis_d(option = "mako", begin = .9, end= 0)
+treeFitTune
 ```
 It looks like log-loss is better a minimum cost complexity at a tree depth of 15, but accuracy is better at higher complexity.
 
@@ -266,9 +272,10 @@ tree_final_model <- extract_workflow(tree_final_fit)
 
 #tree_final_model
 #plot tree
-tree_final_model %>%
+treeFinalPlot <- tree_final_model %>%
   extract_fit_engine() %>%
   rpart.plot::rpart.plot(roundint = FALSE)
+treeFinalPlot
 ```
 The classification tree only created a single leaf containing 100% of the data, as minimum log-loss is at this node.  This is not very useful, even though it is somewhat accurate (~86%).  Once the model is fit, it doesn't allow for any more partitioning from the full dataset.  This doesn't tell us anything more than we already were able to ascertain from the EDA.  Perhaps the Random Forest will give us some more insight by testing the smaller subsets of predictors with each partition.
 
@@ -339,11 +346,12 @@ names(rf_importance) <- c("value", "term")
 rf_importance <-arrange(rf_importance, ("value"))
 
 #plot importance
-rf_importance %>%
+importancePlot <- rf_importance %>%
   mutate(term = fct_reorder(term, desc(value))) %>%
   ggplot(aes(x=term, y=value, levels = term)) +
   geom_bar(stat = "identity") +
   coord_flip()
+importancePlot
 ```
 This model seems to offer more information that the k-fold cv classification tree on how the predictors help to explain the data.  Age is the most important, followed by physical activity.  This supports our EDA evaluation that the proportion of physically active respondents who have diabetes is roughly half of the non-physically active respondents who do not have diabetes.
 
@@ -386,10 +394,11 @@ names(final_rf_importance) <- c("value", "term")
 final_rf_importance <-arrange(final_rf_importance, ("value"))
 
 #plot importance for full dataset
-final_rf_importance %>%
+finalPlot <- final_rf_importance %>%
   mutate(term = fct_reorder(term, desc(value))) %>%
   ggplot(aes(x=term, y=value, levels = term)) +
   geom_bar(stat = "identity") +
   coord_flip()
+finalPlot
 ```
 
