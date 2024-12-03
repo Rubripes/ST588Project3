@@ -8,7 +8,7 @@ editor: visual
 
 # Evaluation and Testing of Classification Tree and Random Forest Models on the Diabetes Health Indicators Dataset
 
-Data were sourced from [Kaggle](https://www.kaggle.com/datasets/alexteboul/diabetes-health-indicators-dataset?resource=download&select=diabetes_binary_health_indicators_BRFSS2015.csv).  The data were previously explored and reformatted in the Exploratory Data Analysis file.
+Data were sourced from [Kaggle](https://www.kaggle.com/datasets/alexteboul/diabetes-health-indicators-dataset?resource=download&select=diabetes_binary_health_indicators_BRFSS2015.csv).  The data were previously explored and reformatted in the Exploratory Data Analysis file.  They are imported and re-formatted using the same code in this page for reproducibility.
 
 ## Introduction:
 
@@ -21,10 +21,10 @@ Most of the variables appear to be factor type variables (e.g., numbers are used
 The purpose of this modeling is to tune and compare regression tree and random forest models using 5 fold cross validation.  The dataset will be randomly split into a training and test set.  The models will be trained on the training dataset, then the best model from each family will be evaluated on the test dataset to then decide which model predicts unseen data the best.  
 
 ### Classification Trees
-A classification tree utilized binary recursive partitioning to seperate observations from a dataset into classification based on the predictors that are being modeled.  Every possible split for every variable in the model will be evaluated and the split that increases homoegeneity will be picked as the best.  This will be repeated until the homogeneity cannot be increased within each the branch any further or a predetermined tree depth has been reached.  This has the effect of making less and less relevent classifications as each branch contains less and less data and these branches are in turn describing phenomena that are unique to that particular dataset and not the population that it was drawn from. [Classification Tree Description](https://www.solver.com/classification-tree). In this modeling excercise, we will use 5-fold cross validation to evaluate the classification tree on 5 (*k*) folds of the training dataset.  The training set will first be seperated into a training and test dataset in a 70/30 ratio and the test dataset will be set aside until the end of model tuning to be used as "unseen" data to help avoid training to the data.  This cross validation generally helps address the issue above in which smaller and smaller branches contain less relevent data by created seperate random samples of the training data to explore.  Each fold is also seperated into a training and test dataset and a tree is fit on the fold training set, then tested on the test dataset.  All k^th^ fold models are then aggregated back into the final model.  Tuning parameters are then evaluated, and in our case, the model with the lowest log-loss will be fit on the test dataset to compare to the random forest model.
+A classification tree utilizes binary recursive partitioning to seperate observations from a dataset into classifications based on the predictors that are being modeled.  Every possible split for every variable in the model will be evaluated and the split that increases homoegeneity will be picked as the best.  This will be repeated until the homogeneity cannot be increased within each the branch any further or a predetermined tree depth has been reached.  This has the effect of making less and less relevent classifications as each branch contains less and less data and these branches are in turn describing phenomena that are unique to that particular dataset and not the population that it was drawn from. [Classification Tree Description](https://www.solver.com/classification-tree), [Wikipedia](https://en.wikipedia.org/wiki/Decision_tree_learning). In this modeling excercise, we will use 5-fold cross validation to evaluate the classification tree on 5 (*k*) folds of the training dataset.  The training set will first be seperated into a training and test dataset in a 70/30 ratio and the test dataset will be set aside until the end of model tuning to be used as "unseen" data to help avoid training to the data.  This cross validation generally helps address the issue above in which smaller and smaller branches contain less relevent data by created seperate random samples of the training data to explore.  Each fold is also seperated into a training and test dataset and a tree is fit on the fold training set, then tested on the test dataset.  All k^th^ fold models are then aggregated back into the final model.  Tuning parameters are then evaluated, and in our case, the model with the lowest log-loss will be fit on the test dataset to compare to the random forest model.
 
 ### Random Forest
-A random forest model is an ensemble model that attempts to increase homogeneity in each branch similar to a classification tree, however, the random forest model does not evaluate all predictors at each node.  Instead, the random forest model randomly selects (with replacement) a subset of the data, then on each subset it will build a tree.  At each node, the algorithm with randomly select a pre-determined number of predictors (`mtry()`) to evaluate at each node base on a pre-determined predictor sample size.  The training below will tune on the `mtry()` parameter to see if there is a benefit (eg lower log-loss) for a given predictor subset size.  The randomization and subsetting of the predictors for each partitioning helps the model to "see" less strong predictors that might otherwise always take precedence during partitioning, as well as helps with the problem of overfitting that is inherent with single classification trees.  Each of the classification trees is then combined by majority voting to generate a final model for each value of `mtry()` that was tested.  The metrics each model are then compared and the model with the lowest log-loss is then selected to compare on the test dataset against the classification tree model.
+A random forest model is an ensemble model that attempts to increase homogeneity in each branch similar to a classification tree, however, the random forest model does not evaluate all predictors at each node.  Instead, the random forest model randomly selects (with replacement) a subset of the data, then on each subset it will build a tree.  At each node, the algorithm will randomly select a pre-determined number of predictors (`mtry()`) to evaluate at each node base on a pre-determined predictor sample size.  The training below will tune on the `mtry()` hyperparameter to see if there is a benefit (eg lower log-loss) for a given predictor subset size.  The randomization and subsetting of the predictors for each partitioning helps the model to "see" less strong predictors that might otherwise always be overpowered during partitioning, as well as helps with the problem of overfitting that is inherent with single classification trees.  Each of the classification trees is then combined by majority voting to generate a final model for each value of `mtry()` that was tested.  The metrics for each model are then compared to each other and the model with the lowest log-loss is then selected to compare on the test dataset against the classification tree model.
 
 
 ### Libraries
@@ -195,7 +195,7 @@ tree_wfl <- workflow() %>%
   add_model(tree_mod)
 ```
 
-Next, we'll create the tuning grid and specify number of each of tree_depth and cost_complexity values to tune to, as well as what metrics to collect for evaluation of models.
+Next, we'll create the tuning grid and specify tree_depth and cost_complexity as the hyperparameter to tune, as well.
 ```{r}
 #create tuning grid to tune on cost_complexity and tree depth.
 tree_grid <- grid_regular(cost_complexity(),
@@ -203,7 +203,7 @@ tree_grid <- grid_regular(cost_complexity(),
                            levels = c(10, 5))
 ```
 
-Then, we'll use `tune_grid()` with the `tree_grid` object from above.
+Then, we'll use `tune_grid()` with the `tree_grid` object from above.  The metrics will be specifed within `tune_grid()`.  This will fit the specified workflow to the dataset and specified hyperparameters for tuning and will be fit on each of the 5 folds.  
 
 ```{r}
 #fit the classification tree model using the pre-defined workflow
@@ -214,7 +214,7 @@ tree_fits <- tree_wfl %>%
 
 ```
 
-Then, we'll plot the `tree_fits` metrics
+Then, we'll plot the `tree_fits` metrics that were estimated in during fitting above.
 
 ```{r}
 #plot accuracy and mn_log_loss by cost_complexity across tree depths
@@ -222,7 +222,7 @@ tree_fits %>%
   collect_metrics() %>%
   mutate(tree_depth = factor(tree_depth)) %>%
   ggplot(aes(cost_complexity, mean, color = tree_depth)) +
-  geom_line(size = 1.0, alpha = 0.5) +
+  geom_line(linewidth = 1.0, alpha = 0.5) +
   geom_point(size = 2) +
   facet_wrap(~ .metric, scales = "free", nrow=2) +
   scale_x_log10(labels = scales::label_number()) +
@@ -270,7 +270,7 @@ tree_final_model %>%
   extract_fit_engine() %>%
   rpart.plot::rpart.plot(roundint = FALSE)
 ```
-The classification tree only created a single leaf containing 100% of the data, as minimum log-loss is at this node.  This is not very useful, even though it is somewhat accurate (~86%).  Once the model is fit, it doesn't allow for any more partitioning from the full dataset.  This doens't tell us anything more than we already were able to ascertain from the EDA.  Perhaps the Random Forest will give us some more insight by testing the smaller subsets of predictors with each partition.
+The classification tree only created a single leaf containing 100% of the data, as minimum log-loss is at this node.  This is not very useful, even though it is somewhat accurate (~86%).  Once the model is fit, it doesn't allow for any more partitioning from the full dataset.  This doesn't tell us anything more than we already were able to ascertain from the EDA.  Perhaps the Random Forest will give us some more insight by testing the smaller subsets of predictors with each partition.
 
 
 ### On to Random Forest!
@@ -308,7 +308,8 @@ We'll select the best tuning parameter based on minimizing log-loss.
 rf_best_params <- select_best(rf_fit, metric="mn_log_loss")
 rf_best_params
 ```
-Now...refit the test set with the best tuning parameter:
+
+Now...refit the test set with the best tuning hyperparamter from above.
 ```{r}
 #create workflow incorporating best parameters from above, fit workflow on full training dataset
 rf_final_wfl <- rf_wfl %>%
