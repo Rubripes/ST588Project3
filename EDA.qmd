@@ -436,7 +436,7 @@ posNoVegProp <- vegTablePct[2,1]/vegTablePct[3,1]
 #create tibble of ratios and rename columns for display.
 vegPropTab <- as_tibble(cbind(posVegProp, posNoVegProp))
 names(vegPropTab) <- c("Vegetable Eaters With Diabetes", "Non-Vegetable Eaters With Diabetes")
-#vegPropTab
+vegPropTab
 ```
 
 The proportion of people who ate vegetables and developed diabetes is lower than the proportion of people who did not eat vegetables and developed diabetes. Let's evaluate this same ratio for fruit consumption.
@@ -575,6 +575,6 @@ propTable
 
 ### Discussion and Summary of EDA
 
-This last tibble compares the proportions of respondents who have chosen healthy options who have developed diabetes against the proportions of respondents who have not chosen healthy options who have developed diabetes. On the surface, it seems that you could potentially pick the healthy choice in 4/5 categories and have a lower risk of developing diabetes. However, the alcohol variable is perplexing. Additionally, each of these proportions is calculated "in a vacuum" in the sense that they do not take other variables into consideration. It could also be that binge drinking is not recommended for diabetics so it may mean that respondents who have diabetes do not binge drink.  The regression tree and random forest models should take care of that and help us to understand if any of the variables are more important than others when understanding risk of developing diabetes and how lifestyle choices can impact that outcome.
+This last tibble compares the proportions of respondents who have chosen healthy options who have developed diabetes against the proportions of respondents who have not chosen healthy options who have developed diabetes. On the surface, it seems that you could potentially pick the healthy choice in 4/5 categories and have a lower risk of developing diabetes. However, the alcohol variable is perplexing. Additionally, each of these proportions is calculated "in a vacuum" in the sense that they do not take other variables into consideration. It could also be that binge drinking is not recommended for diabetics so it may mean that respondents who have diabetes do not binge drink. The regression tree and random forest models should take care of that and help us to understand if any of the variables are more important than others when understanding risk of developing diabetes and how lifestyle choices can impact that outcome.
 
 Click here to get to the [modeling](https://rubripes.github.io/ST588Project3/Modeling.html) page.
