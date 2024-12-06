@@ -138,6 +138,7 @@ predictors <- predict(final_model, new_data = data3)
 data3$pred <- predictors$.pred_class
 confMat <- conf_mat(data = data3, truth = diabetesBin, estimate = pred)
 
+#create api title and description
 #* @apiTitle ST588-601 Fall 2024 Project 3
 #* @apiDescription Make Predictions Using Best Model from Modeling QMD File
 
@@ -180,11 +181,11 @@ function() {
 
 ###########################
 #3 example function calls
-#1)   http://127.0.0.1:8000/pred?Smoker=No&Fruits=Yes&Vegetables=Yes&Drinker=No&Sex=Female&AgeGroup=18%20to%2024&PhysicalActivity=Yes
+#1)   http://127.0.0.1:7934/pred?Smoker=No&Fruits=Yes&Vegetables=Yes&Drinker=No&Sex=Female&AgeGroup=18%20to%2024&PhysicalActivity=Yes
 
-#2)   http://127.0.0.1:8000/pred?Smoker=Yes&Fruits=No&Vegetables=No&Drinker=Yes&Sex=Male&AgeGroup=80%20and%20Older&PhysicalActivity=No
+#2)   http://127.0.0.1:7934/pred?Smoker=Yes&Fruits=No&Vegetables=No&Drinker=Yes&Sex=Male&AgeGroup=80%20and%20Older&PhysicalActivity=No
 
-#3)   http://127.0.0.1:8000/pred?Smoker=Yes&Fruits=No&Vegetables=No&Drinker=No&Sex=Male&AgeGroup=70%20to%2074&PhysicalActivity=No
+#3)   http://127.0.0.1:7934/pred?Smoker=Yes&Fruits=No&Vegetables=No&Drinker=No&Sex=Male&AgeGroup=70%20to%2074&PhysicalActivity=No
 
 
 
